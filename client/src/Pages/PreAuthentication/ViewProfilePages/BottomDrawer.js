@@ -1,14 +1,11 @@
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { View, Text, PanResponder, Animated } from "react-native";
 
 import styled from "styled-components";
 
 import { AntDesign } from "@expo/vector-icons";
-import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
 
 export const BottomDrawer = ({ setIsModalActive }) => {
-  const { bio } = useContext(AuthenticationStackContext);
-
   const translateY = useRef(new Animated.Value(0)).current;
 
   const panResponder = useRef(
@@ -58,7 +55,6 @@ export const BottomDrawer = ({ setIsModalActive }) => {
 
           <SwipeText>Swipe up to learn more about me!</SwipeText>
         </CenteredView>
-        <BioText>{bio}</BioText>
       </Container>
     </Animated.View>
   );
@@ -68,11 +64,10 @@ const Container = styled(View)`
   height: 200px;
   width: 100%;
   background-color: white;
-  opacity: 0.5;
-  position: absolute;
-  bottom: -100px;
+  bottom: -110px;
   border-radius: 30px;
   padding: 10px;
+  position: absolute;
 `;
 
 const CenteredView = styled(View)`
@@ -86,11 +81,4 @@ const SwipeText = styled(Text)`
   font-size: 12px;
   font-family: poppins-500;
   color: black;
-`;
-
-const BioText = styled(Text)`
-  font-size: 12px;
-  font-family: poppins-500;
-  margin-left: 10px;
-  margin-top: 10px;
 `;

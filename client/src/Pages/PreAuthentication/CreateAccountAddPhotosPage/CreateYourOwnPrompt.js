@@ -14,46 +14,49 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 
 export const CreateYourOwnPrompt = ({ navigation, route }) => {
-  const { selectedPhoto, uri } = route.params;
-
   const { setAllPhotos, allPhotos } = useContext(AuthenticationStackContext);
+  const { selectedPhoto, uri, type } = route.params;
 
   const [prompt, setPrompt] = useState("");
 
   const onHandlePromptPressed = async () => {
-    if (!uri) {
-      selectImageFromGallery();
-    } else {
-      await uploadImageToFirebase(uri);
+    navigation.pop(2);
+    if (type === "photo") {
+      selectImageFromGallery(prompt);
+    } else if (type === "prompt") {
+      await uploadImageToFirebase(uri, prompt);
     }
   };
 
   const uploadImageToFirebase = async (imageUri) => {
     try {
-      let updatedPhotos;
+      if (imageUri) {
+        let updatedPhotos;
 
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
 
-      const fileName = `${auth.currentUser.uid}-${selectedPhoto}-profile-picture.jpg`;
-      const storageRef = ref(storage, `profile-pictures/${fileName}`);
+        const fileName = `${auth.currentUser.uid}-${selectedPhoto}-profile-picture.jpg`;
+        const storageRef = ref(storage, `profile-pictures/${fileName}`);
 
-      await uploadBytes(storageRef, blob);
+        await uploadBytes(storageRef, blob, { metadata: null });
 
-      const downloadURL = await getDownloadURL(storageRef);
-      updatedPhotos = allPhotos.map((p) =>
-        p.id === selectedPhoto
-          ? {
-              ...p,
-              picture: downloadURL,
-              id: selectedPhoto,
-              prompt: prompt,
-            }
-          : p
-      );
+        const downloadURL = await getDownloadURL(storageRef);
+        updatedPhotos = allPhotos.map((p) =>
+          p.id === selectedPhoto
+            ? {
+                ...p,
+                picture: downloadURL,
+                id: selectedPhoto,
+                prompt: prompt,
+                disabledDrag: false,
+                disabledReSorted: false,
+              }
+            : p
+        );
 
-      setAllPhotos(updatedPhotos);
-      navigation.pop(2);
+        setAllPhotos(updatedPhotos);
+      }
     } catch (error) {
       console.error("Error during upload to Firebase:", error);
     }

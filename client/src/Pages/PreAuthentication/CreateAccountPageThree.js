@@ -15,9 +15,8 @@ import { ProgressBar, BackArrow } from "../../Components/PreAuthentication";
 export const CreateAccountPageThree = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
 
-  const { setProfilePictureURI, profilePictureURI } = useContext(
-    AuthenticationStackContext
-  );
+  const { setProfilePictureURI, profilePictureURI, profilePicture } =
+    useContext(AuthenticationStackContext);
 
   const cameraRef = useRef(null);
 
@@ -54,17 +53,43 @@ export const CreateAccountPageThree = ({ navigation }) => {
       const base64Image = await FileSystem.readAsStringAsync(fileUri, {
         encoding: FileSystem.EncodingType.Base64,
       });
-
       setProfilePictureURI(base64Image);
-      console.log(base64Image);
+      await performIDScan(base64Image);
     } catch (error) {
       console.error("Error performing quick scan:", error);
       Alert.alert("Error", "Failed to perform quick scan. Please try again.");
     }
   };
 
+  const performIDScan = async (base64Image) => {
+    try {
+      const apiKey = "injFW5TCX0aUihI6zGIVOypSO0KSQAtb";
+      const url = "https://api2.idanalyzer.com/face";
+
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          "X-API-KEY": apiKey,
+        },
+        body: JSON.stringify({
+          face: base64Image,
+          reference: profilePicture,
+          saveFile: true,
+          region: "US", // Replace with appropriate region code
+        }),
+      };
+
+      const response = await fetch(url, options);
+      const responseData = await response.json();
+      console.log(responseData);
+    } catch (e) {}
+  };
+
   const onHandleNavigate = () => {
-    navigation.navigate("CreateAccountPageFour");
+    // navigation.navigate("CreateAccountPageFour");
+    navigation.navigate("FaceScanSuccessPage");
   };
 
   return (
@@ -114,6 +139,7 @@ export const CreateAccountPageThree = ({ navigation }) => {
           </ContinueTouchable>
         )}
       </Container>
+
       <ProgressBar width={"60%"} />
     </SafeArea>
   );

@@ -121,6 +121,7 @@ export const DefaultProvider = ({ children }) => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const { screen, params } = response.notification.request.content.data;
+        console.log(screen);
 
         if (screen && params) {
           setNotificationTrigger(true); // Mark that navigation was triggered by a notification

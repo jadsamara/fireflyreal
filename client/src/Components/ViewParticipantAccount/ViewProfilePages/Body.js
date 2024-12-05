@@ -86,10 +86,7 @@ export const Body = ({ setIsModalActive, participant = {} }) => {
         />
       </ProfilePictureContainer>
 
-      <BottomDrawer
-        setIsModalActive={setIsModalActive}
-        participant={participant}
-      />
+      <BottomDrawer setIsModalActive={setIsModalActive} />
     </Container>
   );
 };

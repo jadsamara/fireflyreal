@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import {
@@ -20,6 +20,15 @@ export const SparkCardRequested = ({ spark = {}, navigation, userNumber }) => {
     sparkHostName = spark.userInfo.name,
     hostProfilePicture = spark.userInfo.profilePicture,
   } = spark;
+
+  const [formattedRequestedTime, setFormattedRequestedTime] = useState(0);
+
+  useEffect(() => {
+    const temp = spark.allRequesters.find(
+      (requester) => requester.user === userNumber
+    );
+    setFormattedRequestedTime(temp.requestDuration || 0);
+  }, [spark]);
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -66,36 +75,39 @@ export const SparkCardRequested = ({ spark = {}, navigation, userNumber }) => {
     });
   };
 
-  const formattedRequestedTime = spark.allRequesters.find(
-    (requester) => requester.user === userNumber
-  )?.requestDuration;
+  const formatDurationFromNow = () => {
+    try {
+      if (formattedRequestedTime) {
+        const requestTime = new Date(
+          formattedRequestedTime.seconds * 1000 +
+            formattedRequestedTime.nanoseconds / 1e6
+        );
+        const currentTime = new Date();
+        const diffMilliseconds = requestTime - currentTime;
 
-  const formatDurationFromNow = (requestDuration) => {
-    const requestTime = new Date(
-      requestDuration.seconds * 1000 + requestDuration.nanoseconds / 1e6
-    );
-    const currentTime = new Date();
-    const diffMilliseconds = requestTime - currentTime;
+        // If the time has already passed, you might want to handle it differently
+        if (diffMilliseconds <= 0) {
+          return "Expired";
+        }
 
-    // If the time has already passed, you might want to handle it differently
-    if (diffMilliseconds <= 0) {
-      return "Expired";
-    }
+        const totalSeconds = Math.floor(diffMilliseconds / 1000);
+        const days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day
+        const hours = Math.floor((totalSeconds % 86400) / 3600); // 3600 seconds in an hour
+        const minutes = Math.floor((totalSeconds % 3600) / 60); // 60 seconds in a minute
 
-    const totalSeconds = Math.floor(diffMilliseconds / 1000);
-    const days = Math.floor(totalSeconds / 86400); // 86400 seconds in a day
-    const hours = Math.floor((totalSeconds % 86400) / 3600); // 3600 seconds in an hour
-    const minutes = Math.floor((totalSeconds % 3600) / 60); // 60 seconds in a minute
-
-    // Format output based on the largest relevant unit
-    if (days > 0) {
-      return `${days} day${days > 1 ? "s" : ""}`;
-    } else if (hours > 0) {
-      return `${hours} hr${hours > 1 ? "s" : ""}`;
-    } else if (minutes > 0) {
-      return `${minutes} min${minutes > 1 ? "s" : ""}`;
-    } else {
-      return `${totalSeconds % 60} sec${totalSeconds % 60 > 1 ? "s" : ""}`;
+        // Format output based on the largest relevant unit
+        if (days > 0) {
+          return `${days} day${days > 1 ? "s" : ""}`;
+        } else if (hours > 0) {
+          return `${hours} hr${hours > 1 ? "s" : ""}`;
+        } else if (minutes > 0) {
+          return `${minutes} min${minutes > 1 ? "s" : ""}`;
+        } else {
+          return `${totalSeconds % 60} sec${totalSeconds % 60 > 1 ? "s" : ""}`;
+        }
+      }
+    } catch (e) {
+      console.log("error");
     }
   };
 
@@ -181,7 +193,7 @@ export const SparkCardRequested = ({ spark = {}, navigation, userNumber }) => {
         </MoneyDepositContainer>
         <LockContainer>
           <FontAwesome name="lock" size={14} color="#34777F" />
-          <LockText>{formatDurationFromNow(formattedRequestedTime)}</LockText>
+          <LockText>{formatDurationFromNow()}</LockText>
           <AntDesign name="questioncircle" size={12} color="#34777F" />
         </LockContainer>
       </MoneyAndLockContainer>

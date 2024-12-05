@@ -6,9 +6,14 @@ import {
   arrayUnion,
   getDoc,
   deleteDoc,
+  getDocs,
+  collection,
+  query,
+  where,
 } from "firebase/firestore";
+import { signOut, deleteUser } from "firebase/auth";
 
-import { setUserData } from "../Slices/userSlice";
+import { setUserData, clearUserData, setUser } from "../Slices/userSlice";
 
 export const cancelSpark = async (
   spark,
@@ -315,5 +320,299 @@ export const cancelSparkRequest = async (spark, userNumber, dispatch) => {
     );
   } catch (error) {
     console.error("Error removing request:", error);
+  }
+};
+
+export const deleteUserFunction = async (userNumber, dispatch) => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser || !userNumber) {
+      throw new Error(
+        "No authenticated user found. Or invalid user number provided"
+      );
+    }
+
+    const userRef = doc(database, "Users", userNumber);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      throw new Error("User document not found.");
+    }
+
+    // If requested
+    const userData = userDoc.data();
+    if (userData.sparksRequestedByUser) {
+      await onHandleDeleteSparkRequest(
+        userNumber,
+        userData.sparksRequestedByUser
+      );
+    }
+
+    // active or confirmed
+    if (userData.currentConfirmedSparks || userData.currentActiveSparks) {
+      await handleCurrentConfirmedSparks(
+        userNumber,
+        userData.sparksRequestedByUser
+      );
+    }
+
+    // if spark completed already
+    if (userData.pastSparks) {
+      await handlePastSparks(userNumber, userData.sparksRequestedByUser);
+    }
+
+    await deleteChatMessagesBySender(userNumber);
+
+    await signOut(auth); // Firebase sign-out
+    await deleteDoc(userRef);
+    await deleteUser(auth.currentUser);
+    dispatch(setUser(null)); // Clear Redux user info
+    dispatch(clearUserData());
+
+    console.log("User account and related Sparks cleaned up successfully.");
+  } catch (error) {}
+};
+
+// only if requested
+
+const onHandleDeleteSparkRequest = async (
+  userNumber,
+  sparksRequestedByUser
+) => {
+  try {
+    // Iterate through each Spark ID in sparksRequestedByUser
+    const promises = sparksRequestedByUser.map(async (sparkId) => {
+      const sparkRef = doc(database, "Sparks", sparkId);
+      const sparkDoc = await getDoc(sparkRef);
+
+      if (sparkDoc.exists()) {
+        const sparkData = sparkDoc.data();
+
+        // Remove the user's object from allRequesters
+        const updatedRequesters = sparkData.allRequesters
+          ? sparkData.allRequesters.filter(
+              (requester) => requester.user !== userNumber
+            )
+          : [];
+
+        // Update the Spark document
+        await updateDoc(sparkRef, {
+          allRequesters: updatedRequesters,
+        });
+
+        console.log(
+          `Removed user ${userNumber} from allRequesters in Spark ${sparkId}`
+        );
+      } else {
+        console.warn(`Spark with ID ${sparkId} not found.`);
+      }
+    });
+
+    // Wait for all Spark updates to complete
+    await Promise.all(promises);
+    console.log("All requested Sparks have been handled.");
+  } catch (error) {
+    console.error("Error handling sparksRequestedByUser:", error);
+  }
+};
+
+// works for both active and confirmed and posted spark by host
+const handleCurrentConfirmedSparks = async (
+  userNumber,
+  currentConfirmedSparks
+) => {
+  try {
+    const promises = currentConfirmedSparks.map(async (sparkId) => {
+      const sparkRef = doc(database, "Sparks", sparkId);
+      const sparkDoc = await getDoc(sparkRef);
+
+      if (!sparkDoc.exists()) {
+        console.warn(`Spark with ID ${sparkId} not found.`);
+        return;
+      }
+
+      const sparkData = sparkDoc.data();
+      const participants = sparkData.currentlyJoinedProfileParticipants || [];
+
+      // If only one participant is left, delete the Spark
+      if (participants.length === 1) {
+        console.log(
+          `Deleting Spark ${sparkId} as only one participant remains.`
+        );
+        await deleteDoc(sparkRef);
+        return;
+      }
+
+      // If the user is the host
+      if (sparkData.host === userNumber) {
+        // Filter out the user from participants
+        const updatedParticipants = participants.filter(
+          (participant) => participant !== userNumber
+        );
+
+        if (updatedParticipants.length === 0) {
+          // If no participants left after filtering, delete the Spark
+          console.log(`Deleting Spark ${sparkId} as no participants remain.`);
+          await deleteDoc(sparkRef);
+          return;
+        }
+
+        // Assign the next participant as the new host
+        const newHost = updatedParticipants[0];
+
+        console.log(
+          `Updating Spark ${sparkId}: Setting new host to ${newHost}.`
+        );
+
+        // Update the new host's document
+        const newHostRef = doc(database, "Users", newHost);
+        await updateDoc(newHostRef, {
+          postedSparksByUser: arrayUnion(sparkId),
+        });
+
+        // Update the Spark document
+        await updateDoc(sparkRef, {
+          host: newHost,
+          currentlyJoinedProfileParticipants: arrayRemove(userNumber),
+          totalNumberOfCurrentParticipants:
+            sparkData.totalNumberOfCurrentParticipants - 1, // Remove the user
+        });
+
+        console.log(`Host updated to ${newHost} for Spark ${sparkId}.`);
+      } else {
+        // If the user is not the host, simply remove them from the participants
+        console.log(
+          `Removing user ${userNumber} from participants in Spark ${sparkId}.`
+        );
+        await updateDoc(sparkRef, {
+          currentlyJoinedProfileParticipants: arrayRemove(userNumber),
+          totalNumberOfCurrentParticipants:
+            sparkData.totalNumberOfCurrentParticipants - 1,
+        });
+      }
+    });
+
+    // Wait for all operations to complete
+    await Promise.all(promises);
+    console.log("All currentConfirmedSparks have been handled.");
+  } catch (error) {
+    console.error("Error handling currentConfirmedSparks:", error);
+  }
+};
+
+const handlePastSparks = async (userNumber, pastSparks) => {
+  try {
+    const promises = pastSparks.map(async (sparkId) => {
+      const sparkRef = doc(database, "Sparks", sparkId);
+      const sparkDoc = await getDoc(sparkRef);
+
+      if (!sparkDoc.exists()) {
+        console.warn(`Spark with ID ${sparkId} not found.`);
+        return;
+      }
+
+      const sparkData = sparkDoc.data();
+      const participants = sparkData.currentlyJoinedProfileParticipants || [];
+
+      // If only one participant is left, delete the Spark
+      if (participants.length === 1) {
+        console.log(
+          `Deleting Spark ${sparkId} as only one participant remains.`
+        );
+        await deleteDoc(sparkRef);
+        return;
+      }
+
+      // If the user is the host
+      if (sparkData.host === userNumber) {
+        // Filter out the user from participants
+        const updatedParticipants = participants.filter(
+          (participant) => participant !== userNumber
+        );
+
+        if (updatedParticipants.length === 0) {
+          // If no participants left after filtering, delete the Spark
+          console.log(`Deleting Spark ${sparkId} as no participants remain.`);
+          await deleteDoc(sparkRef);
+          return;
+        }
+
+        // Assign the next participant as the new host
+        const newHost = updatedParticipants[0];
+
+        console.log(
+          `Updating Spark ${sparkId}: Setting new host to ${newHost}.`
+        );
+
+        // Update the new host's document
+        const newHostRef = doc(database, "Users", newHost);
+        await updateDoc(newHostRef, {
+          postedSparksByUser: arrayUnion(sparkId),
+        });
+
+        // Update the Spark document
+        await updateDoc(sparkRef, {
+          host: newHost,
+          currentlyJoinedProfileParticipants: arrayRemove(userNumber),
+          totalNumberOfCurrentParticipants:
+            sparkData.totalNumberOfCurrentParticipants - 1,
+          isCompleted: arrayRemove(userNumber),
+        });
+
+        console.log(`Host updated to ${newHost} for Spark ${sparkId}.`);
+      } else {
+        // If the user is not the host, simply remove them from the participants
+        console.log(
+          `Removing user ${userNumber} from participants in Spark ${sparkId}.`
+        );
+        await updateDoc(sparkRef, {
+          currentlyJoinedProfileParticipants: arrayRemove(userNumber),
+          totalNumberOfCurrentParticipants:
+            sparkData.totalNumberOfCurrentParticipants - 1,
+          isCompleted: arrayRemove(userNumber),
+        });
+      }
+    });
+
+    // Wait for all operations to complete
+    await Promise.all(promises);
+    console.log("All currentConfirmedSparks have been handled.");
+  } catch (error) {
+    console.error("Error handling currentConfirmedSparks:", error);
+  }
+};
+
+const deleteChatMessagesBySender = async (userNumber) => {
+  try {
+    // Reference the ChatMessages collection
+    const chatMessagesRef = collection(database, "ChatMessages");
+
+    // Query documents where sender matches userNumber
+    const chatMessagesQuery = query(
+      chatMessagesRef,
+      where("sender", "==", userNumber)
+    );
+
+    // Get all matching documents
+    const querySnapshot = await getDocs(chatMessagesQuery);
+
+    if (querySnapshot.empty) {
+      console.log("No chat messages found for the specified sender.");
+      return;
+    }
+
+    // Iterate through the documents and delete them
+    const deletePromises = querySnapshot.docs.map((docSnap) =>
+      deleteDoc(doc(database, "ChatMessages", docSnap.id))
+    );
+
+    // Wait for all deletions to complete
+    await Promise.all(deletePromises);
+
+    console.log(
+      `Successfully deleted all chat messages from sender: ${userNumber}`
+    );
+  } catch (error) {
+    console.error("Error deleting chat messages by sender:", error);
   }
 };

@@ -19,7 +19,9 @@ import { useDispatch } from "react-redux";
 import { updateProfilePhotos } from "../../../Slices/userSlice";
 
 export const AddPhotosPrompts = ({ navigation, route }) => {
-  const { uri, selectedPhoto, userNumber } = route.params;
+  const userNumber = auth.currentUser.phoneNumber;
+
+  const { uri, selectedPhoto, type } = route.params;
   const { setAllPhotos, allPhotos } = useContext(ProfilePageContext);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,9 +48,9 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
 
   const onHandlePromptPressed = async (prompt) => {
     navigation.goBack();
-    if (!uri) {
+    if (type === "photo") {
       selectImageFromGallery(prompt);
-    } else {
+    } else if (type === "prompt") {
       await uploadImageToFirebase(uri, prompt);
     }
   };
@@ -71,10 +73,12 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
               picture: downloadURL,
               id: selectedPhoto,
               prompt: prompt,
+              key: selectedPhoto,
+              disabledDrag: false,
+              disabledReSorted: false,
             }
           : p
       );
-
       setAllPhotos(updatedPhotos); // Update the context state
       dispatch(updateProfilePhotos(updatedPhotos));
 
@@ -118,6 +122,7 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
       uri: uri,
       selectedPhoto: selectedPhoto,
       userNumber,
+      type,
     });
   };
 

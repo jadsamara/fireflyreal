@@ -66,7 +66,16 @@ export const HeaderComponent = ({ navigation }) => {
           </LuminsLabel>
         </ColOne>
       </RowOne>
-      <ViewProfileButton onPress={onHandleNavigateToProfile}>
+      <ViewProfileButton
+        onPress={onHandleNavigateToProfile}
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+      >
         <ViewProfileButtonText>View Profile</ViewProfileButtonText>
       </ViewProfileButton>
       <Subtitle>Hold to drag and rearrange</Subtitle>

@@ -66,7 +66,7 @@ export const Body = ({ navigation, setIsModalActive }) => {
   };
 
   const onHandleContinue = () => {
-    navigation.navigate("CreateAccountPageEight");
+    navigation.navigate("MandatoryScreeningOne");
   };
 
   return (
@@ -170,7 +170,7 @@ const ContinueButton = styled(TouchableOpacity)`
 `;
 
 const ContinueButtonText = styled(Text)`
-  font-size: 16px;
+  font-size: 14px;
   color: white;
   font-family: poppins-500;
 `;

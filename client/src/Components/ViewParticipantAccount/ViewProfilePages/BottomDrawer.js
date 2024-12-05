@@ -3,9 +3,7 @@ import { View, Text, PanResponder, Animated } from "react-native";
 import styled from "styled-components";
 import { AntDesign } from "@expo/vector-icons";
 
-export const BottomDrawer = ({ setIsModalActive, participant = {} }) => {
-  const { userBio = "asdf" } = participant;
-
+export const BottomDrawer = ({ setIsModalActive = {} }) => {
   const translateY = useRef(new Animated.Value(0)).current;
 
   const panResponder = useRef(
@@ -81,11 +79,4 @@ const SwipeText = styled(Text)`
   font-size: 12px;
   font-family: poppins-500;
   color: black;
-`;
-
-const BioText = styled(Text)`
-  font-size: 12px;
-  font-family: poppins-500;
-  margin-left: 10px;
-  margin-top: 10px;
 `;

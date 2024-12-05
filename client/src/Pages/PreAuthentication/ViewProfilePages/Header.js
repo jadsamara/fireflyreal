@@ -69,8 +69,8 @@ const HeaderContainer = styled(View)`
 `;
 
 const ProfilePictureContainer = styled(View)`
-  height: 70px;
-  width: 70px;
+  height: 60px;
+  width: 60px;
   margin-left: 30px;
   margin-top: 20px;
 `;

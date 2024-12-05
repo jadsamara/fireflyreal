@@ -15,7 +15,50 @@ const initialState = {
     isVerified: false,
     profilePicture: null,
     profilePictureURI: "",
-    allPhotos: [],
+    allPhotos: [
+      {
+        id: 1,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+      {
+        id: 2,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+      {
+        id: 3,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+      {
+        id: 4,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+      {
+        id: 5,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+      {
+        id: 6,
+        picture: "",
+        prompt: "Add Prompt",
+        disabledDrag: true, // Set to true if no picture, false otherwise
+        disabledReSorted: true,
+      },
+    ],
     userLumins: 30,
     numberOfRatings: 0,
     averageUserRating: 0,
@@ -95,6 +138,9 @@ const userSlice = createSlice({
       state.userData = initialState;
       state.isAllowed = false;
     },
+    setNewBio(state, action) {
+      state.userData.userBio = action.payload.userBio;
+    },
 
     setIsAllowed(state, action) {
       state.isAllowed = false; // Explicitly set isAllowed
@@ -120,6 +166,7 @@ export const {
   setIsAllowed,
   disableAccountFunction,
   enableAccountFunction,
+  setNewBio,
 } = userSlice.actions;
 
 export default userSlice.reducer;

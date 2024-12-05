@@ -227,7 +227,7 @@ const SparkScheduledTextDays = styled(Text)`
 
 const SparkTitle = styled(Text)`
   color: white;
-  font-size: 30px;
+  font-size: 24px;
   font-family: poppins-800;
   position: absolute;
   z-index: 999;

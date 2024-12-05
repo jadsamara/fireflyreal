@@ -21,7 +21,6 @@ export const CreateAccountPageTwo = ({ navigation }) => {
   const onHandleNavigate = () => {
     if (name && gender) {
       navigation.navigate("AddPhotosOne");
-      // navigation.navigate("CreateAccountPageThree");
     } else {
       Alert.alert("Need name and gender");
     }

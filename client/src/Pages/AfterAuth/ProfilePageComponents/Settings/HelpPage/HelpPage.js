@@ -45,4 +45,5 @@ const SearchBarContainer = styled(View)`
 
 const ContactContainer = styled(View)`
   padding-left: 20px;
+  margin-bottom: 150px;
 `;

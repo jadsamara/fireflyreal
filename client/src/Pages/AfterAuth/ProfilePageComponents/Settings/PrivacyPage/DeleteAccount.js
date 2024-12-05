@@ -2,8 +2,23 @@ import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 import styled from "styled-components";
 import { SectionComponent } from "../Components";
+import { deleteUserFunction } from "../../../../../Functions/CancelSpark";
+
+import { useSelector, useDispatch } from "react-redux";
 
 export const DeleteAccount = () => {
+  const userData = useSelector((state) => state.user.userData);
+  const dispatch = useDispatch();
+
+  const onHandleDeleteAccount = async () => {
+    try {
+      const userNumber = userData.userNumber;
+      await deleteUserFunction(userNumber, dispatch);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <SectionComponent title="Delete Account">
       <SectionDescription>
@@ -29,7 +44,7 @@ export const DeleteAccount = () => {
         I want to permanently delete my Firefly account.
       </SectionDescriptionThree>
 
-      <DeleteAccountButton>
+      <DeleteAccountButton onPress={onHandleDeleteAccount}>
         <DeleteAccountButtonText>DELETE ACCOUNT</DeleteAccountButtonText>
       </DeleteAccountButton>
     </SectionComponent>

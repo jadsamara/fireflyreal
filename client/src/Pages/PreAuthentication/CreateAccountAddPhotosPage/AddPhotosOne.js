@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
+  Alert,
 } from "react-native";
 import styled from "styled-components/native";
 
@@ -41,7 +42,7 @@ export const AddPhotosOne = ({ navigation }) => {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        console.log("Permission to access camera roll denied");
+        Alert.alert("Permission to access camera roll denied");
         return;
       }
 
@@ -67,21 +68,20 @@ export const AddPhotosOne = ({ navigation }) => {
 
   const uploadImageToFirebase = async (imageUri) => {
     try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
+      if (imageUri) {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
 
-      // Generate a unique filename for the uploaded image
-      const fileName = `${auth.currentUser.uid}-${0}-profile-picture.jpg`;
-      const storageRef = ref(storage, `profile-pictures/${fileName}`);
+        // Generate a unique filename for the uploaded image
+        const fileName = `${auth.currentUser.uid}-${0}-profile-picture.jpg`;
+        const storageRef = ref(storage, `profile-pictures/${fileName}`);
 
-      // Upload the image to Firebase Storage
-      await uploadBytes(storageRef, blob);
+        await uploadBytes(storageRef, blob);
 
-      // Get the download URL of the uploaded image
-      const downloadURL = await getDownloadURL(storageRef);
-      setProfilePicture(downloadURL);
-      // Perform further actions with the download URL, such as updating the user's profile picture in Firestore or displaying it in your app
-      console.log("Image uploaded successfully:", downloadURL);
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log(downloadURL);
+        setProfilePicture(downloadURL);
+      }
     } catch (error) {
       console.error("Error uploading image:", error);
     }

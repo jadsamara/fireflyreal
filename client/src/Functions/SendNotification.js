@@ -1,4 +1,4 @@
-export const sendPushNotification = async ({
+export const sendPushNotificationToScreen = async ({
   notificationsArray,
   title,
   body,

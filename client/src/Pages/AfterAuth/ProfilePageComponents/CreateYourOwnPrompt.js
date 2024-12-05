@@ -16,9 +16,8 @@ import { useDispatch } from "react-redux";
 import { updateProfilePhotos } from "../../../Slices/userSlice";
 
 export const CreateYourOwnPrompt = ({ navigation, route }) => {
-  const { selectedPhoto, uri, userNumber } = route.params;
-
   const { setAllPhotos, allPhotos } = useContext(ProfilePageContext);
+  const { selectedPhoto, uri, userNumber, type } = route.params;
 
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -34,10 +33,11 @@ export const CreateYourOwnPrompt = ({ navigation, route }) => {
   }, []);
 
   const onHandlePromptPressed = async () => {
-    if (!uri) {
-      selectImageFromGallery();
-    } else {
-      await uploadImageToFirebase(uri);
+    navigation.pop(2);
+    if (type === "photo") {
+      selectImageFromGallery(prompt);
+    } else if (type === "prompt") {
+      await uploadImageToFirebase(uri, prompt);
     }
   };
 
@@ -59,6 +59,9 @@ export const CreateYourOwnPrompt = ({ navigation, route }) => {
               picture: downloadURL,
               id: selectedPhoto,
               prompt: prompt,
+              key: selectedPhoto,
+              disabledDrag: false,
+              disabledReSorted: false,
             }
           : p
       );
@@ -69,8 +72,6 @@ export const CreateYourOwnPrompt = ({ navigation, route }) => {
       await updateDoc(doc(database, "Users", userNumber), {
         allPhotos: updatedPhotos,
       });
-
-      navigation.pop(2);
     } catch (error) {
       console.error("Error during upload to Firebase:", error);
     }

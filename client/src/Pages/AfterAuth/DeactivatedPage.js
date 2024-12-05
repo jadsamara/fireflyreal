@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 
 import styled from "styled-components/native";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, database } from "../../Config/firebase";
 
-import { enableAccountFunction } from "../../Slices/userSlice";
 import { useDispatch } from "react-redux";
+import { AuthContext } from "../../Config/AuthContext";
+import { enableAccountFunction } from "../../Slices/userSlice";
 
 export const DeactivatedPage = ({ navigation }) => {
   const userNumber = auth.currentUser.phoneNumber;
   const dispatch = useDispatch();
+  const { setAccountStatus } = useContext(AuthContext);
 
   const reactivateAccount = async () => {
     try {
@@ -18,8 +20,9 @@ export const DeactivatedPage = ({ navigation }) => {
 
       // Update the user's status to "active"
       await updateDoc(userRef, {
-        status: "active",
+        accountStatus: "active",
       });
+      setAccountStatus("active");
       dispatch(enableAccountFunction());
 
       Alert.alert(
@@ -28,7 +31,6 @@ export const DeactivatedPage = ({ navigation }) => {
         [
           {
             text: "OK",
-            onPress: () => navigation.navigate("Home"),
           },
         ]
       );

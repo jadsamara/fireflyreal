@@ -16,9 +16,7 @@ import {
 import { doc, arrayUnion, writeBatch } from "firebase/firestore";
 import { auth, database } from "../../../../Config/firebase";
 
-import { sendPushNotification } from "../../../../Functions/SendNotification";
-
-import { AuthContext } from "../../../../Config/AuthContext";
+import { sendPushNotificationToScreen } from "../../../../Functions/SendNotification";
 
 import { updateLuminsAndSparks } from "../../../../Slices/userSlice";
 import { useDispatch } from "react-redux";
@@ -76,7 +74,7 @@ export const ConfirmSendRequestPage = ({ navigation, route }) => {
       };
 
       const notificationsArray = spark.userInfo.notificationsArray;
-      await sendPushNotification({
+      await sendPushNotificationToScreen({
         notificationsArray,
         title: "Firefly",
         body: "Someone just requested you!",
@@ -113,7 +111,7 @@ export const ConfirmSendRequestPage = ({ navigation, route }) => {
           checkedTerms={checkedTerms}
           setCheckedTerms={setCheckedTerms}
         />
-        <FooterComponent sendPushNotification={onHandleDatabaseQueries} />
+        <FooterComponent onHandleDatabaseQueries={onHandleDatabaseQueries} />
       </ScrollContainer>
     </SafeArea>
   );

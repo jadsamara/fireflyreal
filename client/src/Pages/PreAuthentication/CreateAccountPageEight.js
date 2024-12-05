@@ -17,7 +17,7 @@ import { SubmitUser } from "./ConfigFunctions/SubmitUser";
 
 export const CreateAccountPageEight = ({ navigation }) => {
   const onHandleNavigate = () => {
-    // navigation.navigate("CreateAccountPageEight");
+    navigation.navigate("CreateAccountPageEight");
   };
 
   return (
@@ -43,7 +43,7 @@ export const CreateAccountPageEight = ({ navigation }) => {
           </FooterHeaderContainer>
 
           <FooterContainer>
-            <SubmitUser />
+            <SubmitUser navigation={navigation} />
             <ProgressBar width={"95%"} />
           </FooterContainer>
         </Container>

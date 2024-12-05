@@ -135,7 +135,10 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
               size={20}
               color={isPlaying ? "#00ceff" : "black"}
             />
-            <BodyTwoText color={isPlaying ? "#00ceff" : "black"}>
+            <BodyTwoText
+              color={isPlaying ? "#00ceff" : "black"}
+              ellipsizeMode="tail"
+            >
               "{voicePrompt}"
             </BodyTwoText>
           </ListenRowTwo>
@@ -190,7 +193,6 @@ const BodyTwoText = styled(Text)`
 const BodyThreeText = styled(Text)`
   font-size: 10px;
   font-family: poppins-500;
-  /* color: #00ceff; */
   color: ${({ color }) => color};
 `;
 

@@ -13,6 +13,9 @@ import {
   PageSixPrompts,
   CreateAccountPageSeven,
   CreateAccountPageEight,
+  MandatoryScreeningOne,
+  FaceScanSuccessPage,
+  GoExtraStepPage,
 } from "../Pages/PreAuthentication";
 
 import {
@@ -90,6 +93,16 @@ export const AuthNav = () => {
           name="CreateYourOwnPrompt"
           component={CreateYourOwnPrompt}
         />
+        <Stack.Screen
+          name="MandatoryScreeningOne"
+          component={MandatoryScreeningOne}
+        />
+        <Stack.Screen
+          name="FaceScanSuccessPage"
+          component={FaceScanSuccessPage}
+        />
+
+        <Stack.Screen name="GoExtraStepPage" component={GoExtraStepPage} />
 
         <Stack.Screen name="PageSixPrompts" component={PageSixPrompts} />
         <Stack.Screen

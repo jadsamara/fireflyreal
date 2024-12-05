@@ -1,6 +1,10 @@
-export { CardOne } from "./CardOne";
-export { CardTwo } from "./CardTwo";
-export { CardThree } from "./CardThree";
-export { CardFour } from "./CardFour";
-export { CardFive } from "./CardFive";
-export { CardSix } from "./CardSix";
+export { WhatAreLuminsTab } from "./WhatAreLuminsTab";
+export { LuminDepositSysTab } from "./LuminDepositSysTab";
+export { PunctualityTab } from "./PunctualityTab";
+export { EarningAndLosingLuminsTab } from "./EarningAndLosingLuminsTab";
+export { CancellingSparkTab } from "./CancellingSparkTab";
+export { WhatsWithChatTab } from "./WhatsWithChatTab";
+export { KeepCommunitySafeTab } from "./KeepCommunitySafeTab";
+export { CancellationPenalties } from "./CancellationPenalties";
+export { WhenHostCancels } from "./WhenHostCancels";
+export { GracePeriodsTab } from "./GracePeriodsTab";

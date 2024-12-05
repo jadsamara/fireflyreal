@@ -18,12 +18,48 @@ export const AuthenticationStackProvider = ({ children }) => {
   const [isPhotoIDVerified, setIsPhotoIDVerified] = useState(false);
 
   const [allPhotos, setAllPhotos] = useState([
-    { id: 1, picture: "", prompt: "Add Prompt" },
-    { id: 2, picture: "", prompt: "Add Prompt" },
-    { id: 3, picture: "", prompt: "Add Prompt" },
-    { id: 4, picture: "", prompt: "Add Prompt" },
-    { id: 5, picture: "", prompt: "Add Prompt" },
-    { id: 6, picture: "", prompt: "Add Prompt" },
+    {
+      id: 1,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
+    {
+      id: 2,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
+    {
+      id: 3,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
+    {
+      id: 4,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
+    {
+      id: 5,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
+    {
+      id: 6,
+      picture: "",
+      prompt: "Add Prompt",
+      disabledDrag: true, // Set to true if no picture, false otherwise
+      disabledReSorted: true,
+    },
   ]);
 
   const [recordedAudioLink, setRecordedAudioLink] = useState(null);

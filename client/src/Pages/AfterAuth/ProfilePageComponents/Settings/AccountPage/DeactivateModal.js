@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/native";
 
 import { TouchableOpacity } from "react-native";
@@ -8,6 +8,7 @@ import { auth, database } from "../../../../../Config/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { disableAccountFunction } from "../../../../../Slices/userSlice";
+import { AuthContext } from "../../../../../Config/AuthContext";
 
 export const DeactivateModal = ({
   setToggleModal,
@@ -15,6 +16,8 @@ export const DeactivateModal = ({
   navigation,
 }) => {
   const userNumber = auth.currentUser.phoneNumber;
+  const { setAccountStatus } = useContext(AuthContext);
+
   const dispatch = useDispatch();
 
   const disableAccount = async () => {
@@ -26,6 +29,7 @@ export const DeactivateModal = ({
         accountStatus: "disabled",
       });
 
+      setAccountStatus("disabled");
       dispatch(disableAccountFunction());
       setToggleModal(false);
 

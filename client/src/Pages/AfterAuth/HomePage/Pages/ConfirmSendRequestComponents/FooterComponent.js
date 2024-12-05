@@ -3,12 +3,12 @@ import React from "react";
 
 import styled from "styled-components";
 
-export const FooterComponent = ({ sendPushNotification }) => {
+export const FooterComponent = ({ onHandleDatabaseQueries }) => {
   const onHandleCancelRequest = () => {};
 
   return (
     <Container>
-      <SendRequestButton onPress={sendPushNotification}>
+      <SendRequestButton onPress={onHandleDatabaseQueries}>
         <SendRequestText>Send Request</SendRequestText>
       </SendRequestButton>
       <CancelRequestButton onPress={onHandleCancelRequest}>

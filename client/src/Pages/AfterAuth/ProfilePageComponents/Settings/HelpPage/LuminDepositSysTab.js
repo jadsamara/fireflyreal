@@ -2,15 +2,14 @@ import { View, Text } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 
-export const CardThree = () => {
+export const LuminDepositSysTab = () => {
   return (
     <View>
       <FaqCardText>
-        Lumins serve to reduce the likelihood of flaking and lack of commitment
-        in online meet ups. Lumins are earned or lost depending on how punctual
-        users are when attending Sparks.
+        When you participate in a Spark, your deposited Lumins are in holding
+        until the event concludes. Your punctuality affects how many Lumins you
+        get back.
       </FaqCardText>
-      <Br />
       <Br />
     </View>
   );
@@ -22,7 +21,8 @@ const Br = styled(View)`
 `;
 
 const FaqCardText = styled(Text)`
-  font-size: 10px;
+  font-size: 8px;
   color: #527e65;
   font-family: poppins-400;
+  margin-left: 10px;
 `;

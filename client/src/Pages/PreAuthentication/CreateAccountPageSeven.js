@@ -44,11 +44,18 @@ export const CreateAccountPageSeven = ({ navigation }) => {
             multiline={true}
             textAlignVertical="top"
             blurOnSubmit={true}
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
           />
           <MaxCharText>{bio.length}/250 char</MaxCharText>
         </InputContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
+        <ContinueButton onPress={onHandleNavigate} bio={bio} />
         <ProgressBar width={"80%"} />
       </Container>
     </SafeArea>
@@ -98,20 +105,20 @@ const InputContainer = styled(View)`
 `;
 
 const BioInput = styled(TextInput)`
-  width: 90%;
+  width: 95%;
   height: 170px;
   background-color: #e0dfdf;
   border-radius: 20px;
   text-align: left;
   padding: 18px;
   font-family: poppins-400;
-  font-size: 15px;
+  font-size: 12px;
 `;
 
 const MaxCharText = styled(Text)`
   font-family: poppins-400;
-  font-size: 14px;
+  font-size: 10px;
   position: absolute;
   bottom: 10px;
-  right: 40px;
+  right: 30px;
 `;

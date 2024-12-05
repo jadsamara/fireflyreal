@@ -3,7 +3,18 @@ import React, { useState } from "react";
 import styled from "styled-components/native";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { CardOne, CardTwo, CardThree, CardFour, CardFive, CardSix } from ".";
+import {
+  WhatAreLuminsTab,
+  LuminDepositSysTab,
+  EarningAndLosingLuminsTab,
+  CancellingSparkTab,
+  WhatsWithChatTab,
+  KeepCommunitySafeTab,
+  PunctualityTab,
+  CancellationPenalties,
+  WhenHostCancels,
+  GracePeriodsTab,
+} from ".";
 
 export const FaqCard = ({ res }) => {
   const [isActive, setIsActive] = useState(false);
@@ -24,12 +35,16 @@ export const FaqCard = ({ res }) => {
       </TabContainer>
       {isActive ? (
         <View>
-          {res === "What are Lumins?" && <CardOne />}
-          {res === "Lumin deposit system" && <CardTwo />}
-          {res === "Earning and losing Lumins" && <CardThree />}
-          {res === "Cancelling Sparks" && <CardFour />}
-          {res === "What’s with the chat?" && <CardFive />}
-          {res === "Keeping our community safe" && <CardSix />}
+          {res === "What are Lumins?" && <WhatAreLuminsTab />}
+          {res === "Lumin deposit system" && <LuminDepositSysTab />}
+          {res === "Punctuality and Lumins" && <PunctualityTab />}
+          {res === "Earning and losing Lumins" && <EarningAndLosingLuminsTab />}
+          {res === "Cancelling Sparks" && <CancellingSparkTab />}
+          {res === "Cancellation Penalties" && <CancellationPenalties />}
+          {res === "When Host Cancels" && <WhenHostCancels />}
+          {res === "Grace Periods" && <GracePeriodsTab />}
+          {res === "What’s with the chat?" && <WhatsWithChatTab />}
+          {res === "Keeping our community safe" && <KeepCommunitySafeTab />}
         </View>
       ) : null}
     </Container>

@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 
-export const CardOne = () => {
+export const WhatAreLuminsTab = () => {
   return (
     <View>
       <FaqCardText>
@@ -27,7 +27,8 @@ const Br = styled(View)`
 `;
 
 const FaqCardText = styled(Text)`
-  font-size: 10px;
+  font-size: 8px;
   color: #527e65;
   font-family: poppins-400;
+  margin-left: 10px;
 `;

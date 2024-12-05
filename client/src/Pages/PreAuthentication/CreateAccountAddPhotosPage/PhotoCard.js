@@ -1,72 +1,97 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View, Image } from "react-native";
 import React, { useEffect } from "react";
 import styled from "styled-components";
-
 import FastImage from "react-native-fast-image";
+import { DoubleTap } from "../../../Components/GlobalComponents/DoubleTap";
 
-export const PhotoCard = ({ id, selectedPhoto, photo, navigation }) => {
-  let startX = 0;
-  let startY = 0;
+export const PhotoCard = React.memo(
+  ({
+    id,
+    photo,
+    selectedPhoto,
+    navigation,
+    setSelectedPhoto,
+    onHandleDeletePhoto,
+  }) => {
+    useEffect(() => {
+      if (photo.picture) {
+        FastImage.preload([{ uri: photo.picture }]);
+      }
+    }, [photo]);
 
-  useEffect(() => {
-    FastImage.preload([{ uri: photo.picture }]);
-  }, [photo]);
-
-  const handleStart = (event) => {
-    const { pageX, pageY } = event.nativeEvent;
-    startX = pageX;
-    startY = pageY;
-  };
-
-  const handleRelease = (event) => {
-    const { pageX, pageY } = event.nativeEvent;
-    const dx = Math.abs(pageX - startX);
-    const dy = Math.abs(pageY - startY);
-
-    // Trigger onPress only if movement is minimal (not a swipe)
-    if (dx < 10 && dy < 10) {
-      // selectImageFromGallery()
-
+    const onPressOnce = () => {
+      setSelectedPhoto(id);
       navigation.navigate("AddPhotosPrompts", {
-        uri: "",
+        uri: photo.picture,
         selectedPhoto: id,
+        type: "photo",
       });
+    };
+
+    const onPressTwice = () => {
+      setSelectedPhoto(id);
+    };
+
+    const blankFunc = () => {};
+
+    if (!photo.picture) {
+      return (
+        <DoubleTap onPressOnce={onPressOnce} onPressTwice={blankFunc}>
+          <PhotoCardButton>
+            <PlusText>+</PlusText>
+          </PhotoCardButton>
+        </DoubleTap>
+      );
     }
-  };
 
-  return (
-    <PhotoCardButton
-      activeOpacity={0.8}
-      onPressIn={handleStart}
-      onPressOut={handleRelease}
-    >
-      {photo.picture ? (
-        <ProfilePictureImage
-          source={{ uri: photo.picture }}
-          resizeMode={FastImage.resizeMode.cover}
-          style={
-            selectedPhoto === id
-              ? {
-                  borderWidth: 3,
-                  borderColor: "green",
+    if (photo.picture) {
+      return (
+        <>
+          <DeleteButton
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}
+            onPress={() => onHandleDeletePhoto(id)}
+          >
+            <DeleteText>x</DeleteText>
+          </DeleteButton>
+          <DoubleTap onPressOnce={onPressOnce} onPressTwice={onPressTwice}>
+            <PhotoCardButton>
+              <ProfilePictureImage
+                resizeMode={FastImage.resizeMode.cover}
+                source={{ uri: photo.picture }}
+                style={
+                  selectedPhoto === id
+                    ? {
+                        borderWidth: 3,
+                        borderColor: "green",
+                      }
+                    : {}
                 }
-              : {}
-          }
-        />
-      ) : (
-        <PlusText>+</PlusText>
-      )}
-    </PhotoCardButton>
-  );
-};
+              />
+            </PhotoCardButton>
+          </DoubleTap>
+        </>
+      );
+    }
+  },
+  (prevProps, nextProps) =>
+    prevProps.photo.picture === nextProps.photo.picture &&
+    prevProps.selectedPhoto === nextProps.selectedPhoto
+);
 
-const PhotoCardButton = styled(TouchableOpacity)`
-  flex: 1;
-  background-color: #e3e1e1;
-  text-align: center;
-  align-items: center;
+const PhotoCardButton = styled(View)`
+  height: 110px;
+  width: 110px;
   justify-content: center;
+  align-items: center;
+  background-color: gray;
   border-radius: 10px;
+  position: relative;
 `;
 
 const ProfilePictureImage = styled(FastImage)`
@@ -76,8 +101,26 @@ const ProfilePictureImage = styled(FastImage)`
 `;
 
 const PlusText = styled(Text)`
-  color: #bababa;
+  color: white;
   font-family: "poppins-600";
-  font-size: 72px;
-  text-align: center;
+  font-size: 42px;
+`;
+
+const DeleteButton = styled(TouchableOpacity)`
+  height: 25px;
+  width: 25px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  position: absolute;
+  z-index: 999999;
+  top: -7px;
+  right: 0px;
+`;
+
+const DeleteText = styled(Text)`
+  color: green;
+  font-family: "poppins-800";
+  font-size: 12px;
 `;

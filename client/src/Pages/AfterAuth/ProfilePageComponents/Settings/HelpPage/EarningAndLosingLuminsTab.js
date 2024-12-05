@@ -2,13 +2,13 @@ import { View, Text } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 
-export const CardSix = () => {
+export const EarningAndLosingLuminsTab = () => {
   return (
     <View>
       <FaqCardText>
-        When you participate in a Spark, your deposited Lumins are in holding
-        until the event concludes. Your punctuality affects how many Lumins you
-        get back.
+        Lumins serve to reduce the likelihood of flaking and lack of commitment
+        in online meet ups. Lumins are earned or lost depending on how punctual
+        users are when attending Sparks.
       </FaqCardText>
       <Br />
       <Br />

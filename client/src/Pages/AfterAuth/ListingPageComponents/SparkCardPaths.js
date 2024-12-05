@@ -125,7 +125,11 @@ export const SparkCardPaths = ({ spark, navigation }) => {
     if (isRequested) {
       return (
         <View>
-          <SparkCardRequested spark={spark} navigation={navigation} />
+          <SparkCardRequested
+            spark={spark}
+            navigation={navigation}
+            userNumber={userNumber}
+          />
         </View>
       );
     }

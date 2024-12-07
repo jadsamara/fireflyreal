@@ -30,15 +30,19 @@ export const GoogleAutoComponent = ({ setSearchText, searchText }) => {
       const latitude = location.latitude;
       const longitude = location.longitude;
       const radius = 5000; // Set the radius in meters (e.g., 5000 meters or 5 kilometers)
+      const types = "establishment";
 
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?` +
-          `input=${inputText}&location=${latitude},${longitude}&radius=${radius}&key=${apiKey}`
-      );
+      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+        inputText
+      )}&types=${types}&location=${latitude},${longitude}&radius=${radius}&key=${apiKey}`;
+      const response = await fetch(url);
       const data = await response.json();
 
       if (data.status === "OK") {
-        const fetchedPredictions = data.predictions;
+        const fetchedPredictions = data.predictions.filter((prediction) => {
+          // Further filter to exclude typically private categories if they appear
+          return !prediction.types.includes("lodging");
+        });
         setPredictions(fetchedPredictions); // Update the state with fetched predictions
       } else {
         console.error("Error fetching predictions:", data.status);

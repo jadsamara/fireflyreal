@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import {
   View,
   Text,
@@ -9,31 +15,48 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { SafeArea } from "../../Components/GlobalComponents/";
-import { CameraView, useCameraPermissions } from "expo-camera/next";
 import * as FileSystem from "expo-file-system";
 import { ProgressBar, BackArrow } from "../../Components/PreAuthentication";
 import { AuthenticationStackContext } from "../../Context/AuthenticationStackContext";
 import { FontAwesome } from "@expo/vector-icons";
 
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+} from "react-native-vision-camera";
+
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-reanimated";
+
 export const CreateAccountPageFive = ({ navigation }) => {
-  const [hasPermission, requestPermission] = useCameraPermissions();
+  const { profilePictureURI, front, setIsPhotoIDVerified, back, setBack } =
+    useContext(AuthenticationStackContext);
+  const device = useCameraDevice("back"); // Use the back camera
+  const { hasPermission, requestPermission } = useCameraPermission();
   const [isProcessing, setIsProcessing] = useState(false);
   const [retakePhoto, setRetakePhoto] = useState(false);
-
-  const { profilePictureURI, front, isPhotoIDVerified, back, setBack } =
-    useContext(AuthenticationStackContext);
   const cameraRef = useRef(null);
 
   useEffect(() => {
-    if (!hasPermission) {
-      requestPermission();
-    }
-  }, [hasPermission, requestPermission]);
+    const checkPermission = async () => {
+      // Explicitly request permission if not determined
+      if (hasPermission.status === "notDetermined") {
+        await requestPermission();
+      }
+    };
+
+    checkPermission();
+  }, [hasPermission.status, requestPermission]);
 
   const takePicture = async () => {
-    if (cameraRef.current) {
+    if (cameraRef.current && device) {
       try {
-        const { uri } = await cameraRef.current.takePictureAsync();
+        const photo = await cameraRef.current.takePhoto({
+          qualityPrioritization: "quality",
+          flash: "off",
+        });
+        const uri = photo.path;
         setIsProcessing(true);
         await performQuickScan(uri);
         setIsProcessing(false);
@@ -92,7 +115,8 @@ export const CreateAccountPageFive = ({ navigation }) => {
       ) {
         setRetakePhoto(true);
       } else if (responseData) {
-        navigation.navigate("AddPhotosOne");
+        navigation.navigate("CreateAccountPageEight");
+        setIsPhotoIDVerified(2);
       }
 
       Alert.alert("Scan Result", "ID scan completed successfully!");
@@ -109,6 +133,16 @@ export const CreateAccountPageFive = ({ navigation }) => {
     setRetakePhoto(false);
   };
 
+  const focus = useCallback((point) => {
+    const c = cameraRef.current;
+    if (c == null) return;
+    c.focus(point);
+  }, []);
+
+  const gesture = Gesture.Tap().onEnd(({ x, y }) => {
+    runOnJS(focus)({ x, y });
+  });
+
   return (
     <SafeArea>
       <BackArrow navigation={navigation} />
@@ -120,9 +154,18 @@ export const CreateAccountPageFive = ({ navigation }) => {
         ) : hasPermission === false ? (
           <Text>No access to camera.</Text>
         ) : !back ? (
-          <CameraContainer>
-            <CameraComponent ref={cameraRef} type="back" />
-          </CameraContainer>
+          <GestureDetector gesture={gesture}>
+            <CameraContainer>
+              <CameraComponent
+                ref={cameraRef}
+                device={device}
+                isActive={true}
+                photo={true}
+                video={false} // Set to true if video recording is needed
+                audio={false}
+              />
+            </CameraContainer>
+          </GestureDetector>
         ) : (
           <CameraContainer>
             <TakenSelfieCheckImage
@@ -191,7 +234,7 @@ const CameraContainer = styled(View)`
   border-radius: 40px;
 `;
 
-const CameraComponent = styled(CameraView)`
+const CameraComponent = styled(Camera)`
   width: 100%;
   height: 100%;
 `;

@@ -9,7 +9,7 @@ import {
 import styled from "styled-components/native";
 
 import { SafeArea } from "../../../Components/GlobalComponents/SafeArea";
-import * as ImagePicker from "expo-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
 
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
 import { FontAwesome } from "@expo/vector-icons";
@@ -39,30 +39,25 @@ export const AddPhotosOne = ({ navigation }) => {
 
   const selectImageFromGallery = async () => {
     try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission to access camera roll denied");
-        return;
-      }
-
-      const imagePickerResult = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0,
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+        mediaType: "photo",
       });
 
-      if (!imagePickerResult.canceled) {
-        const uri = imagePickerResult.assets[0].uri;
+      const uri = image.path;
 
-        console.log("Selected image URI:", uri); // Log the selected image URI to verify it's not undefined or null
-
-        // Upload the selected image to Firebase Storage
-        await uploadImageToFirebase(uri);
-      }
+      // Upload the selected image to Firebase Storage
+      await uploadImageToFirebase(uri);
     } catch (error) {
+      if (error.code === "E_PICKER_CANCELLED") {
+        // Handle case where user cancels the image picker
+        Alert.alert("Image selection cancelled");
+        return;
+      }
       console.error("Error selecting image:", error);
+      Alert.alert("Error", "Failed to select image");
     }
   };
 
@@ -79,7 +74,6 @@ export const AddPhotosOne = ({ navigation }) => {
         await uploadBytes(storageRef, blob);
 
         const downloadURL = await getDownloadURL(storageRef);
-        console.log(downloadURL);
         setProfilePicture(downloadURL);
       }
     } catch (error) {

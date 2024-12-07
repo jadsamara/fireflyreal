@@ -1,40 +1,67 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import styled from "styled-components/native";
 
-import { Camera } from "expo-camera";
-
 import { SafeArea } from "../../Components/GlobalComponents/SafeArea";
-
 import { AuthenticationStackContext } from "../../Context/AuthenticationStackContext";
-
 import * as FileSystem from "expo-file-system";
-
 import { ProgressBar, BackArrow } from "../../Components/PreAuthentication";
+import { FontAwesome } from "@expo/vector-icons";
+
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+} from "react-native-vision-camera";
 
 export const CreateAccountPageThree = ({ navigation }) => {
-  const [hasPermission, setHasPermission] = useState(null);
+  const {
+    setProfilePictureURI,
+    profilePictureURI,
+    profilePicture,
+    setIsPhotoIDVerified,
+  } = useContext(AuthenticationStackContext);
 
-  const { setProfilePictureURI, profilePictureURI, profilePicture } =
-    useContext(AuthenticationStackContext);
-
+  const device = useCameraDevice("front"); // Use the back camera
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [retakePhoto, setRetakePhoto] = useState(false);
   const cameraRef = useRef(null);
 
   useEffect(() => {
-    const requestCameraPermission = async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+    const checkPermission = async () => {
+      // Explicitly request permission if not determined
+      if (hasPermission.status === "notDetermined" || hasPermission === false) {
+        await requestPermission();
+      }
     };
 
-    requestCameraPermission();
-  }, []);
+    checkPermission();
+  }, [hasPermission.status, requestPermission]);
 
   const takePicture = async () => {
-    if (cameraRef.current) {
+    if (cameraRef.current && device) {
       try {
-        const { uri } = await cameraRef.current.takePictureAsync();
+        const photo = await cameraRef.current.takePhoto({
+          qualityPrioritization: "quality",
+          flash: "off",
+        });
+        const uri = photo.path;
+        setIsProcessing(true);
         await performQuickScan(uri);
+        navigation.navigate("FaceScanSuccessPage");
+
+        setIsProcessing(false);
       } catch (error) {
+        setIsProcessing(false);
+        // setRetakePhoto(true);
         console.error("Error taking picture:", error);
         Alert.alert("Error", "Failed to take picture. Please try again.");
       }
@@ -43,6 +70,7 @@ export const CreateAccountPageThree = ({ navigation }) => {
 
   const clearPictureURI = () => {
     setProfilePictureURI("");
+    setRetakePhoto(false);
   };
 
   const performQuickScan = async (uri) => {
@@ -83,8 +111,13 @@ export const CreateAccountPageThree = ({ navigation }) => {
 
       const response = await fetch(url, options);
       const responseData = await response.json();
-      console.log(responseData);
-    } catch (e) {}
+
+      if (responseData) {
+        setIsPhotoIDVerified(1);
+      }
+    } catch (e) {
+      setRetakePhoto(true);
+    }
   };
 
   const onHandleNavigate = () => {
@@ -106,10 +139,13 @@ export const CreateAccountPageThree = ({ navigation }) => {
         ) : !profilePictureURI ? (
           <CameraContainer>
             <CameraComponent
-              autoFocus={"on"}
               ref={cameraRef}
-              type={Camera.Constants.Type.front}
-            ></CameraComponent>
+              device={device}
+              isActive={true}
+              photo={true}
+              video={false} // Set to true if video recording is needed
+              audio={false}
+            />
           </CameraContainer>
         ) : (
           <CameraContainer>
@@ -119,14 +155,25 @@ export const CreateAccountPageThree = ({ navigation }) => {
           </CameraContainer>
         )}
 
-        {!profilePictureURI ? (
+        {!profilePictureURI && !isProcessing && !retakePhoto ? (
           <CaptureButton onPress={takePicture}>
             <CaptureText>Capture</CaptureText>
           </CaptureButton>
-        ) : (
+        ) : isProcessing && profilePictureURI && !retakePhoto ? (
+          <Row>
+            <ProcessedText>Processing Photo</ProcessedText>
+            <ActivityIndicator color="#000" />
+          </Row>
+        ) : retakePhoto ? (
           <CaptureButton onPress={clearPictureURI}>
             <CaptureText>Retake</CaptureText>
           </CaptureButton>
+        ) : (
+          <Row>
+            <ProcessedText>Done</ProcessedText>
+
+            <FontAwesome name="check" size={22} color="#79d17c" />
+          </Row>
         )}
 
         {!profilePictureURI ? (
@@ -171,6 +218,22 @@ const CameraContainer = styled(View)`
 const CameraComponent = styled(Camera)`
   width: 100%;
   height: 100%;
+`;
+
+const Row = styled(View)`
+  position: absolute;
+  bottom: 200px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const ProcessedText = styled(Text)`
+  color: black;
+  font-size: 14px;
+  font-family: "poppins-500";
+  margin-right: 10px;
 `;
 
 const CaptureButton = styled(TouchableOpacity)`

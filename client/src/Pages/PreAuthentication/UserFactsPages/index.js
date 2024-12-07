@@ -1,0 +1,9 @@
+export { WorkPage } from "./WorkPage/WorkPage";
+export { SchoolPage } from "./SchoolPage/SchoolPage";
+export { ReligiousBeliefs } from "./ReligiousBeliefsPage/ReligiousBeliefs";
+export { PoliticalBeliefs } from "./PoliticalBeliefsPage/PoliticalBeliefs";
+export { LanguagePage } from "./LanguagePage/LanguagePage";
+export { JobTitle } from "./JobTitlePage/JobTitle";
+export { HighestSchoolDegree } from "./HighestSchoolDegreePage/HighestSchoolDegree";
+export { EthnicityPage } from "./EthnicityPage/EthnicityPage";
+export { HomeTown } from "./HomeTownPage/HomeTown";

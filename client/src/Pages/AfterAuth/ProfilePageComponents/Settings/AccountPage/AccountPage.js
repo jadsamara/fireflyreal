@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 
 export const AccountPage = ({ navigation }) => {
   const userData = useSelector((state) => state.user.userData);
+  const isVerified = userData.isVerified;
 
   const isActiveBool = userData.accountStatus === "active" ? false : true;
 
@@ -48,7 +49,7 @@ export const AccountPage = ({ navigation }) => {
           </SearchBarContainer>
           <EditNameComponent />
           <EditHomeTown />
-          <VerifyAccount />
+          {isVerified !== 2 ? <VerifyAccount /> : null}
           <DeactivateAccount
             toggleModal={toggleModal}
             setToggleModal={setToggleModal}

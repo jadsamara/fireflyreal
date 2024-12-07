@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import styled from "styled-components/native";
 
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
@@ -12,7 +12,7 @@ import { SafeArea } from "../../../Components/GlobalComponents/SafeArea";
 import { auth, storage } from "../../../Config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import * as ImagePicker from "expo-image-picker";
+import ImagePicker from "react-native-image-crop-picker";
 
 export const AddPhotosPrompts = ({ navigation, route }) => {
   const { setAllPhotos, allPhotos } = useContext(AuthenticationStackContext);
@@ -40,7 +40,6 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
   const uploadImageToFirebase = async (imageUri, prompt) => {
     try {
       if (imageUri && prompt) {
-        console.log(imageUri);
         const response = await fetch(imageUri);
         const blob = await response.blob();
 
@@ -73,26 +72,25 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
 
   const selectImageFromGallery = async (prompt) => {
     try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access camera roll denied");
-        return;
-      }
-
-      const imagePickerResult = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0,
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+        mediaType: "photo",
       });
 
-      if (!imagePickerResult.canceled) {
-        const uri = imagePickerResult.assets[0].uri;
-        await uploadImageToFirebase(uri, prompt);
-      }
+      const uri = image.path;
+
+      // Upload the selected image to Firebase Storage
+      await uploadImageToFirebase(uri, prompt);
     } catch (error) {
+      if (error.code === "E_PICKER_CANCELLED") {
+        // Handle case where user cancels the image picker
+        Alert.alert("Image selection cancelled");
+        return;
+      }
       console.error("Error selecting image:", error);
+      Alert.alert("Error", "Failed to select image");
     }
   };
 

@@ -31,6 +31,18 @@ import { AuthenticationStackProvider } from "../Context/AuthenticationStackConte
 
 import { CreateYourOwnPromptMic } from "../Pages/PreAuthentication/SupportingPages/CreateYourOwnPromptMic";
 
+import {
+  WorkPage,
+  SchoolPage,
+  ReligiousBeliefs,
+  PoliticalBeliefs,
+  LanguagePage,
+  JobTitle,
+  HighestSchoolDegree,
+  EthnicityPage,
+  HomeTown,
+} from "../Pages/PreAuthentication/UserFactsPages";
+
 export const AuthNav = () => {
   const Stack = createNativeStackNavigator();
 
@@ -103,6 +115,19 @@ export const AuthNav = () => {
         />
 
         <Stack.Screen name="GoExtraStepPage" component={GoExtraStepPage} />
+
+        <Stack.Screen name="WorkPage" component={WorkPage} />
+        <Stack.Screen name="SchoolPage" component={SchoolPage} />
+        <Stack.Screen name="ReligiousBeliefs" component={ReligiousBeliefs} />
+        <Stack.Screen name="PoliticalBeliefs" component={PoliticalBeliefs} />
+        <Stack.Screen name="LanguagePage" component={LanguagePage} />
+        <Stack.Screen name="JobTitle" component={JobTitle} />
+        <Stack.Screen
+          name="HighestSchoolDegree"
+          component={HighestSchoolDegree}
+        />
+        <Stack.Screen name="EthnicityPage" component={EthnicityPage} />
+        <Stack.Screen name="HomeTown" component={HomeTown} />
 
         <Stack.Screen name="PageSixPrompts" component={PageSixPrompts} />
         <Stack.Screen

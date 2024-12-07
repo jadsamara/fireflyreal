@@ -37,7 +37,7 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
             disabledDrag: !photo.picture, // Set to true if no picture, false otherwise
             disabledReSorted: !photo.picture,
             id: photo.id, // Unique ID
-            key: String(index + 1), // Unique key
+            key: photo.id, // Unique key
             picture: photo.picture || "",
             prompt: photo.prompt || "Add Prompt",
           }));
@@ -112,7 +112,7 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
   const render_item = (item) => {
     return (
       <View
-        key={item.id}
+        key={item.key}
         style={{
           backgroundColor: "#fff",
         }}
@@ -199,6 +199,7 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
 
 const Container = styled(View)`
   width: 100%;
+  margin-bottom: 100px;
 `;
 
 const Row = styled(View)`

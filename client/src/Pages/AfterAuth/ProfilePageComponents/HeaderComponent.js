@@ -1,14 +1,14 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import styled from "styled-components";
-import { AuthContext } from "../../../Config/AuthContext";
 import { calculateAge } from "../../../Functions/GetAgeNew";
 
 import { AntDesign } from "@expo/vector-icons";
 
 import LuminsLogo from "../../../Assets/luminslogo.png";
 import VerifiedLogo from "../../../Assets/verified.png";
+import VerifiedGreyLogo from "../../../Assets/verified-grey.png";
 
 import FastImage from "react-native-fast-image";
 import { useSelector } from "react-redux";
@@ -36,10 +36,17 @@ export const HeaderComponent = ({ navigation }) => {
               uri: userData.profilePicture,
             }}
           />
-          <VerifiedImage
-            resizeMode={FastImage.resizeMode.cover}
-            source={VerifiedLogo}
-          />
+          {userData.isVerified === 1 ? (
+            <VerifiedImage
+              resizeMode={FastImage.resizeMode.cover}
+              source={VerifiedGreyLogo}
+            />
+          ) : (
+            <VerifiedImage
+              resizeMode={FastImage.resizeMode.cover}
+              source={VerifiedLogo}
+            />
+          )}
         </ProfilePictureContainer>
 
         <ColOne>

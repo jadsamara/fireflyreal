@@ -15,7 +15,7 @@ export const AuthenticationStackProvider = ({ children }) => {
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
 
-  const [isPhotoIDVerified, setIsPhotoIDVerified] = useState(false);
+  const [isPhotoIDVerified, setIsPhotoIDVerified] = useState(0);
 
   const [allPhotos, setAllPhotos] = useState([
     {
@@ -61,10 +61,49 @@ export const AuthenticationStackProvider = ({ children }) => {
       disabledReSorted: true,
     },
   ]);
-
   const [recordedAudioLink, setRecordedAudioLink] = useState(null);
-
   const [voicePrompt, setVoicePrompt] = useState("Interesting Fact About me");
+
+  const [homeTown, setHomeTown] = useState("");
+  const [languagesSpoken, setLanguagesSpoken] = useState({
+    languagesList: [],
+    isHidden: false,
+  });
+
+  const [userEthnicity, setUserEthnicity] = useState({
+    ethnicity: "",
+    isHidden: false,
+  });
+
+  const [userReligion, setUserReligion] = useState({
+    religion: "",
+    isHidden: false,
+  });
+
+  const [userPoliticalOpinion, setUserPoliticalOpinion] = useState({
+    opinion: "",
+    isHidden: false,
+  });
+
+  const [userSchool, setUserSchool] = useState({
+    school: "",
+    isHidden: false,
+  });
+
+  const [userHighestSchoolDegree, setUserHighestSchoolDegree] = useState({
+    schoolGrad: "",
+    isHidden: false,
+  });
+
+  const [userWork, setUserWork] = useState({
+    company: "",
+    isHidden: false,
+  });
+
+  const [userJobTitle, setUserJobTitle] = useState({
+    title: "",
+    isHidden: false,
+  });
 
   return (
     <AuthenticationStackContext.Provider
@@ -95,6 +134,24 @@ export const AuthenticationStackProvider = ({ children }) => {
         setIsPhotoIDVerified,
         back,
         setBack,
+        homeTown,
+        setHomeTown,
+        languagesSpoken,
+        setLanguagesSpoken,
+        userEthnicity,
+        setUserEthnicity,
+        userReligion,
+        setUserReligion,
+        userPoliticalOpinion,
+        setUserPoliticalOpinion,
+        userSchool,
+        setUserSchool,
+        userHighestSchoolDegree,
+        setUserHighestSchoolDegree,
+        userWork,
+        setUserWork,
+        userJobTitle,
+        setUserJobTitle,
       }}
     >
       {children}

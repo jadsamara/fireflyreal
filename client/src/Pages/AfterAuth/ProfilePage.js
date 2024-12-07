@@ -10,6 +10,7 @@ import {
   GetVerifiedComponent,
   EditVoicePrompt,
   BioComponent,
+  MyGlowSection,
 } from "./ProfilePageComponents";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -20,6 +21,7 @@ import { useSelector } from "react-redux";
 
 export const ProfilePage = ({ navigation }) => {
   const userData = useSelector((state) => state.user.userData);
+  const isVerified = userData.isVerified;
   const [enableScroll, setEnableScroll] = useState(true);
 
   const [bio, setBio] = useState(userData.userBio);
@@ -48,7 +50,13 @@ export const ProfilePage = ({ navigation }) => {
           navigation={navigation}
           setEnableScroll={setEnableScroll}
         />
-        <GetVerifiedComponent />
+        {isVerified !== 2 ? (
+          <VerificationContainer>
+            <SectionLabel>Verification</SectionLabel>
+            <GetVerifiedComponent />
+          </VerificationContainer>
+        ) : null}
+        <MyGlowSection navigation={navigation} />
         <EditVoicePrompt />
         <BioComponent bio={bio} setBio={setBio} />
       </KeyboardAwareScrollView>
@@ -73,4 +81,15 @@ const HeaderText = styled(Text)`
 const SettingsButton = styled(TouchableOpacity)`
   position: absolute;
   right: 20px;
+`;
+
+const VerificationContainer = styled(View)`
+  margin-bottom: 40px;
+`;
+
+const SectionLabel = styled(Text)`
+  font-size: 16px;
+  font-family: poppins-400;
+  margin-left: 10px;
+  color: green;
 `;

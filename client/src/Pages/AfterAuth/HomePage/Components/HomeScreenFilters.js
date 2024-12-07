@@ -178,12 +178,12 @@ const TagClose = styled(TouchableOpacity)`
   background-color: #79d17c;
 `;
 
-const TagIcon = styled(FontAwesome)`
-  margin-left: 10px;
-`;
-
 const TagCloseText = styled(Text)`
   color: white;
   font-family: poppins-700;
   font-size: 10px;
+`;
+
+const TagIcon = styled(FontAwesome)`
+  margin-left: 10px;
 `;

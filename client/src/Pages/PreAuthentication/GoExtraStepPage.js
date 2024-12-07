@@ -156,7 +156,7 @@ const ParagraphTwo = styled(Text)`
 `;
 
 const ParagraphMargined = styled(Text)`
-  text-align: start;
+  text-align: left;
   font-size: 12px;
   width: 210px;
   font-family: poppins-600;

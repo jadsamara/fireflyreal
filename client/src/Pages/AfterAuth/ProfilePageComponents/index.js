@@ -5,3 +5,4 @@ export { AddPhotosPrompts } from "./AddPhotosPrompts";
 export { GetVerifiedComponent } from "./GetVerifiedComponent";
 export { EditVoicePrompt } from "./EditVoicePrompt";
 export { BioComponent } from "./BioComponent";
+export { MyGlowSection } from "./MyGlowSection";

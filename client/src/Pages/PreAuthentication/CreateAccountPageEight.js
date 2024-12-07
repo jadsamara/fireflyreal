@@ -2,8 +2,6 @@ import React, { useContext } from "react";
 import { View, Text, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
-import { AuthenticationStackContext } from "../../Context/AuthenticationStackContext";
-
 import {
   ProgressBar,
   ContinueButton,
@@ -16,10 +14,6 @@ import { PageEightSections } from "./Components/PageEightSections";
 import { SubmitUser } from "./ConfigFunctions/SubmitUser";
 
 export const CreateAccountPageEight = ({ navigation }) => {
-  const onHandleNavigate = () => {
-    navigation.navigate("CreateAccountPageEight");
-  };
-
   return (
     <SafeArea>
       <Scroll>

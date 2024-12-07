@@ -20,6 +20,7 @@ export const RootNav = () => {
       auth,
       async (authenticatedUser) => {
         if (authenticatedUser) {
+          console.log(authenticatedUser);
           const { uid, phoneNumber, email, displayName, photoURL } =
             authenticatedUser;
           dispatch(setUser({ uid, phoneNumber, email, displayName, photoURL }));

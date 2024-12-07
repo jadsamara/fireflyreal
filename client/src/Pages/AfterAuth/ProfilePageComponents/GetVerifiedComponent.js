@@ -1,13 +1,18 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import styled from "styled-components/native";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import VerifiedLogo from "../../../Assets/verified.png";
 
 export const GetVerifiedComponent = () => {
   return (
     <Container>
       <Col>
-        <Title>Get verified</Title>
+        <Row>
+          <Title>Get verified</Title>
+          <VerifiedImage resizeMode={"cover"} source={VerifiedLogo} />
+        </Row>
         <SubTitle>Want to ensure users know you’re real? </SubTitle>
       </Col>
       <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
@@ -17,7 +22,6 @@ export const GetVerifiedComponent = () => {
 
 const Container = styled(TouchableOpacity)`
   width: 95%;
-  border-bottom-width: 0.3px;
   border-top-width: 0.3px;
   padding: 10px;
   border-color: gray;
@@ -29,6 +33,17 @@ const Container = styled(TouchableOpacity)`
 `;
 
 const Col = styled(View)``;
+
+const Row = styled(View)`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const VerifiedImage = styled(Image)`
+  height: 25px;
+  width: 25px;
+  margin-left: 15px;
+`;
 
 const Title = styled(Text)`
   font-size: 15px;

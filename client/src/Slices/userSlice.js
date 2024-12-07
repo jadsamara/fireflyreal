@@ -12,7 +12,7 @@ const initialState = {
     userBio: "",
     userNumber: "",
     verificationId: "",
-    isVerified: false,
+    isVerified: 1,
     profilePicture: null,
     profilePictureURI: "",
     allPhotos: [
@@ -86,6 +86,7 @@ const initialState = {
       { tags: [], isEnabled: true },
     ],
     accountStatus: "active",
+    userInformation: [],
   },
   isAllowed: false,
 };

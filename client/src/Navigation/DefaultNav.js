@@ -91,6 +91,18 @@ import {
 import { auth, database } from "../Config/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
+import {
+  WorkPage,
+  SchoolPage,
+  ReligiousBeliefs,
+  PoliticalBeliefs,
+  LanguagesPage,
+  JobTitle,
+  HighestSchoolDegree,
+  EthnicityPage,
+  HomeTown,
+} from "../Pages/AfterAuth/ProfilePageComponents/UserFactsPages";
+
 export const DefaultNav = () => {
   const { accountStatus, setAccountStatus } = useContext(AuthContext);
   const Stack = createNativeStackNavigator();
@@ -257,6 +269,19 @@ export const DefaultNav = () => {
         <Stack.Screen name="NotificationsPage" component={NotificationsPage} />
         <Stack.Screen name="PrivacyPage" component={PrivacyPage} />
         <Stack.Screen name="AboutPage" component={AboutPage} />
+
+        <Stack.Screen name="WorkPage" component={WorkPage} />
+        <Stack.Screen name="SchoolPage" component={SchoolPage} />
+        <Stack.Screen name="ReligiousBeliefs" component={ReligiousBeliefs} />
+        <Stack.Screen name="PoliticalBeliefs" component={PoliticalBeliefs} />
+        <Stack.Screen name="LanguagesPage" component={LanguagesPage} />
+        <Stack.Screen name="JobTitle" component={JobTitle} />
+        <Stack.Screen
+          name="HighestSchoolDegree"
+          component={HighestSchoolDegree}
+        />
+        <Stack.Screen name="EthnicityPage" component={EthnicityPage} />
+        <Stack.Screen name="HomeTown" component={HomeTown} />
       </Stack.Navigator>
     </ProfilePageProvider>
   );

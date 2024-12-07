@@ -56,7 +56,7 @@ export const AddPhotosTwo = ({ navigation }) => {
   };
 
   const onHandleContinue = () => {
-    navigation.navigate("CreateAccountPageSix");
+    navigation.navigate("HomeTown");
   };
 
   const onHandleDeletePhoto = (id) => {
@@ -77,9 +77,10 @@ export const AddPhotosTwo = ({ navigation }) => {
   };
 
   const renderItem = (item) => {
+    item.key = item.id;
     return (
       <View
-        key={item.id}
+        key={item.key}
         style={{
           backgroundColor: "#fff",
         }}

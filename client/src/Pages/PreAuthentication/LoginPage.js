@@ -18,10 +18,11 @@ import {
 } from "../../Components/PreAuthentication";
 
 export const LoginPage = ({ navigation }) => {
-  const { setVerificationId } = useContext(AuthenticationStackContext);
+  const { setVerificationId, countryCode } = useContext(
+    AuthenticationStackContext
+  );
 
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
 
   const recaptchaVerifier = useRef(null);
 
@@ -79,10 +80,7 @@ export const LoginPage = ({ navigation }) => {
           firebaseConfig={firebaseConfig}
         />
         <InputContainer>
-          <CountryCodeButton
-            setCountryCode={setCountryCode}
-            countryCode={countryCode}
-          />
+          <CountryCodeButton navigation={navigation} />
           <PhoneNumberInput
             value={phoneNumber}
             onChangeText={handlePhoneNumberChange}
@@ -97,8 +95,8 @@ export const LoginPage = ({ navigation }) => {
         <MessageText>
           We will message you a code to validate your number
         </MessageText>
-        <ContinueButton onPress={onHandleSubmitNumber} />
-        <ProgressBar width={"10%"} />
+        <ContinueButton onPress={onHandleSubmitNumber} bottom={120} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -107,6 +105,7 @@ export const LoginPage = ({ navigation }) => {
 const Container = styled(View)`
   flex: 1;
   padding: 15px;
+  margin-top: 10px;
 `;
 
 const TitleText = styled(Text)`
@@ -117,7 +116,7 @@ const TitleText = styled(Text)`
 `;
 
 const HeaderOneText = styled(Text)`
-  font-size: 25px;
+  font-size: 22px;
   color: #686868;
   font-family: poppins-500;
   margin-top: 12px;
@@ -138,6 +137,7 @@ const InputContainer = styled(View)`
   flex-direction: row;
   align-items: center;
   margin-top: 40px;
+  margin-left: 15px;
 `;
 
 const PhoneNumberInput = styled(TextInput)`
@@ -151,10 +151,12 @@ const PhoneNumberInput = styled(TextInput)`
 `;
 
 const MessageText = styled(Text)`
-  font-size: 20px;
+  font-size: 16px;
   color: #686868;
-  font-family: poppins-300;
-  margin-top: 50px;
+  font-family: poppins-500;
+  margin-top: 40px;
   text-align: center;
   z-index: -9999;
+  width: 80%;
+  align-self: center;
 `;

@@ -61,7 +61,7 @@ export const CreateAccountPageThree = ({ navigation }) => {
         setIsProcessing(false);
       } catch (error) {
         setIsProcessing(false);
-        // setRetakePhoto(true);
+        setRetakePhoto(true);
         console.error("Error taking picture:", error);
         Alert.alert("Error", "Failed to take picture. Please try again.");
       }
@@ -82,7 +82,7 @@ export const CreateAccountPageThree = ({ navigation }) => {
         encoding: FileSystem.EncodingType.Base64,
       });
       setProfilePictureURI(base64Image);
-      await performIDScan(base64Image);
+      // await performIDScan(base64Image);
     } catch (error) {
       console.error("Error performing quick scan:", error);
       Alert.alert("Error", "Failed to perform quick scan. Please try again.");
@@ -145,6 +145,9 @@ export const CreateAccountPageThree = ({ navigation }) => {
               photo={true}
               video={false} // Set to true if video recording is needed
               audio={false}
+              style={{
+                transform: [{ scale: 1.5 }], // Adjust scaleX for horizontal stretch
+              }}
             />
           </CameraContainer>
         ) : (
@@ -187,7 +190,7 @@ export const CreateAccountPageThree = ({ navigation }) => {
         )}
       </Container>
 
-      <ProgressBar width={"60%"} />
+      <ProgressBar width={"10%"} bottom={0} />
     </SafeArea>
   );
 };
@@ -198,12 +201,9 @@ const Container = styled(View)`
 `;
 
 const Title = styled(Text)`
-  position: absolute;
-  top: 10px;
-  left: 30px;
+  font-size: 30px;
   color: black;
-  font-family: "poppins-900";
-  font-size: 34px;
+  font-family: poppins-900;
 `;
 
 const CameraContainer = styled(View)`

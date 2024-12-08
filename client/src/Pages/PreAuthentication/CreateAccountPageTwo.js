@@ -31,12 +31,8 @@ export const CreateAccountPageTwo = ({ navigation }) => {
       <BackArrow navigation={navigation} />
 
       <Container>
-        <TitleContainer>
-          <Title>Tell us about yourself.</Title>
-        </TitleContainer>
-        <HeaderContainer>
-          <HeaderText>What is your name and gender?</HeaderText>
-        </HeaderContainer>
+        <Title>Tell us about yourself.</Title>
+        <HeaderOneText>What is your name and gender?</HeaderOneText>
         <InputContainer>
           <NameTextInput
             onChangeText={setName}
@@ -50,8 +46,8 @@ export const CreateAccountPageTwo = ({ navigation }) => {
         <GenderContainer>
           <GenderButtons setGender={setGender} gender={gender} />
         </GenderContainer>
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={120} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -60,27 +56,18 @@ export const CreateAccountPageTwo = ({ navigation }) => {
 const Container = styled(View)`
   flex: 1;
   padding: 15px;
-`;
-
-const TitleContainer = styled(View)`
-  height: 25%;
-  justify-content: flex-end;
+  margin-top: 10px;
 `;
 
 const Title = styled(Text)`
-  font-size: 39px;
+  font-size: 38px;
   color: black;
   font-family: poppins-900;
   margin-left: 15px;
 `;
 
-const HeaderContainer = styled(View)`
-  margin-top: 18px;
-  position: relative;
-`;
-
-const HeaderText = styled(Text)`
-  font-size: 23px;
+const HeaderOneText = styled(Text)`
+  font-size: 22px;
   color: #686868;
   font-family: poppins-500;
   margin-top: 12px;
@@ -97,7 +84,7 @@ const InputContainer = styled(View)`
 const NameTextInput = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
 `;
@@ -107,4 +94,5 @@ const GenderContainer = styled(View)`
   height: 25%;
   flex-direction: row;
   justify-content: space-evenly;
+  margin-top: 10px;
 `;

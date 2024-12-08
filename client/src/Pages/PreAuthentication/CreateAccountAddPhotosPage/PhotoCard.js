@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import FastImage from "react-native-fast-image";
 import { DoubleTap } from "../../../Components/GlobalComponents/DoubleTap";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 export const PhotoCard = React.memo(
   ({
@@ -21,6 +22,17 @@ export const PhotoCard = React.memo(
 
     const onPressOnce = () => {
       setSelectedPhoto(id);
+      if (selectedPhoto === id) {
+        navigation.navigate("AddPhotosPrompts", {
+          uri: photo.picture,
+          selectedPhoto: id,
+          type: "photo",
+        });
+      }
+    };
+
+    const onPressOnceEmpty = () => {
+      setSelectedPhoto(id);
       navigation.navigate("AddPhotosPrompts", {
         uri: photo.picture,
         selectedPhoto: id,
@@ -28,17 +40,13 @@ export const PhotoCard = React.memo(
       });
     };
 
-    const onPressTwice = () => {
-      setSelectedPhoto(id);
-    };
-
     const blankFunc = () => {};
 
     if (!photo.picture) {
       return (
-        <DoubleTap onPressOnce={onPressOnce} onPressTwice={blankFunc}>
+        <DoubleTap onPressOnce={onPressOnceEmpty} onPressTwice={blankFunc}>
           <PhotoCardButton>
-            <PlusText>+</PlusText>
+            <FontAwesome5 name="plus" size={24} color="gray" />
           </PhotoCardButton>
         </DoubleTap>
       );
@@ -57,9 +65,9 @@ export const PhotoCard = React.memo(
             }}
             onPress={() => onHandleDeletePhoto(id)}
           >
-            <DeleteText>x</DeleteText>
+            <FontAwesome name="close" size={12} color="#527e65" />
           </DeleteButton>
-          <DoubleTap onPressOnce={onPressOnce} onPressTwice={onPressTwice}>
+          <DoubleTap onPressOnce={onPressOnce} onPressTwice={blankFunc}>
             <PhotoCardButton>
               <ProfilePictureImage
                 resizeMode={FastImage.resizeMode.cover}
@@ -67,8 +75,8 @@ export const PhotoCard = React.memo(
                 style={
                   selectedPhoto === id
                     ? {
-                        borderWidth: 3,
-                        borderColor: "green",
+                        borderWidth: 4,
+                        borderColor: "#79D17C",
                       }
                     : {}
                 }
@@ -89,7 +97,7 @@ const PhotoCardButton = styled(View)`
   width: 110px;
   justify-content: center;
   align-items: center;
-  background-color: gray;
+  background-color: #ebebeb;
   border-radius: 10px;
   position: relative;
 `;

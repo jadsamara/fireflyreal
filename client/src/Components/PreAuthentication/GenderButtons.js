@@ -19,7 +19,16 @@ export const GenderButtons = ({ gender, setGender }) => {
           name="male-outline"
           size={74}
           color={gender === "male" ? "#79D17C" : "#686868"}
-          style={{ marginLeft: 10 }}
+          style={{
+            marginLeft: 10,
+            ...(gender === "male" && {
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }),
+          }}
         />
 
         {gender === "male" ? (
@@ -38,6 +47,15 @@ export const GenderButtons = ({ gender, setGender }) => {
           name="female-outline"
           size={74}
           color={gender === "female" ? "#79D17C" : "#686868"}
+          style={{
+            ...(gender === "female" && {
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }),
+          }}
         />
         {gender === "female" ? (
           <GenderTextActive>Female</GenderTextActive>
@@ -55,6 +73,15 @@ export const GenderButtons = ({ gender, setGender }) => {
           name="transgender-outline"
           size={74}
           color={gender === "non-binary" ? "#79D17C" : "#686868"}
+          style={{
+            ...(gender === "non-binary" && {
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }),
+          }}
         />
         {gender === "non-binary" ? (
           <GenderTextActive>Non-Binary</GenderTextActive>
@@ -75,9 +102,11 @@ const GenderColumn = styled(TouchableOpacity)`
   border-radius: 20px;
 `;
 
-const GenderText = styled(Text)``;
+const GenderText = styled(Text)`
+  font-family: poppins-400;
+`;
 
 const GenderTextActive = styled(Text)`
   color: #79d17c;
-  font-family: poppins-600;
+  font-family: poppins-700;
 `;

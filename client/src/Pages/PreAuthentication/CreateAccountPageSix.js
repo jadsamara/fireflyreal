@@ -84,8 +84,8 @@ export const CreateAccountPageSix = ({ navigation }) => {
           />
         </InputContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"60%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -117,9 +117,9 @@ const InputContainer = styled(View)`
 
 const VoicePromptButton = styled(TouchableOpacity)`
   width: 90%;
-  height: 80px;
+  height: 60px;
   padding: 5px;
-  border-color: #707070;
+  border-color: rgba(112, 112, 112, 0.3);
   border-width: 0.5px;
   border-radius: 10px;
   justify-content: space-around;

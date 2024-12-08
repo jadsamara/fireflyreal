@@ -43,6 +43,8 @@ import {
   HomeTown,
 } from "../Pages/PreAuthentication/UserFactsPages";
 
+import { AreaCodePage } from "../Pages/PreAuthentication/SupportingPages/AreaCodePage";
+
 export const AuthNav = () => {
   const Stack = createNativeStackNavigator();
 
@@ -70,6 +72,8 @@ export const AuthNav = () => {
           name="CreateAccountPageTwo"
           component={CreateAccountPageTwo}
         />
+
+        <Stack.Screen name="AreaCodePage" component={AreaCodePage} />
 
         <Stack.Screen name="AddPhotosOne" component={AddPhotosOne} />
 

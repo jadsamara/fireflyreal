@@ -44,6 +44,7 @@ export const CreateAccountPageOne = ({ navigation }) => {
       <Container>
         <DatePicker
           mode="date"
+          style={{ backgroundColor: "#ebebeb" }}
           modal
           open={open}
           maximumDate={new Date()}
@@ -63,10 +64,10 @@ export const CreateAccountPageOne = ({ navigation }) => {
           <AgeButton onPress={() => setOpen(true)}>
             <AgeText>{age}</AgeText>
           </AgeButton>
-          <ResendCodeText>*We require all users to be 17+</ResendCodeText>
+          <LabelText>*We require all users to be 17+</LabelText>
         </InputContainer>
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={120} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -75,17 +76,18 @@ export const CreateAccountPageOne = ({ navigation }) => {
 const Container = styled(View)`
   flex: 1;
   padding: 15px;
+  margin-top: 10px;
 `;
 
 const Title = styled(Text)`
-  font-size: 39px;
+  font-size: 38px;
   color: black;
   font-family: poppins-900;
   margin-left: 15px;
 `;
 
 const HeaderOneText = styled(Text)`
-  font-size: 23px;
+  font-size: 22px;
   color: #686868;
   font-family: poppins-500;
   margin-top: 12px;
@@ -110,9 +112,10 @@ const AgeButton = styled(TouchableOpacity)`
 
 const AgeText = styled(Text)`
   color: #527e65;
+  font-family: poppins-500;
 `;
 
-const ResendCodeText = styled(Text)`
+const LabelText = styled(Text)`
   font-size: 13px;
   color: #686868;
   font-family: poppins-500;

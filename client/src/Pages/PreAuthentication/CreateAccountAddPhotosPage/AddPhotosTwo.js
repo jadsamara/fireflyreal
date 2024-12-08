@@ -7,8 +7,9 @@ import { SafeArea } from "../../../Components/GlobalComponents/SafeArea";
 import { PhotoCard } from "./PhotoCard";
 
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import DraggableGrid from "react-native-draggable-grid";
+import { BackArrow, ProgressBar } from "../../../Components/PreAuthentication";
 
 const GRID_COLUMNS = 3; // Number of columns in the grid
 
@@ -18,13 +19,19 @@ export const AddPhotosTwo = ({ navigation }) => {
   const [filteredData, setFilteredData] = useState(allPhotos);
 
   useEffect(() => {
-    const filteredDataTemp = allPhotos.slice(
-      0,
-      Math.min(
-        6,
-        allPhotos.findIndex((photo) => !photo.picture) + 1 || 6 // Ensure we stop at 6
-      )
-    );
+    // Reorganize `allPhotos` so items with photos come first
+    const filteredDataTemp = [...allPhotos].sort((a, b) => {
+      // If both have pictures, maintain order
+      if (a.picture && b.picture) return a.id - b.id;
+
+      // If only one has a picture, prioritize the one with a picture
+      if (a.picture && !b.picture) return -1;
+      if (!a.picture && b.picture) return 1;
+
+      // If neither has a picture, maintain order
+      return a.id - b.id;
+    });
+
     setFilteredData(filteredDataTemp);
   }, [allPhotos]);
 
@@ -60,24 +67,32 @@ export const AddPhotosTwo = ({ navigation }) => {
   };
 
   const onHandleDeletePhoto = (id) => {
-    // Update the photo list by removing the picture
+    // Update the photo list by removing the picture for the matching ID
     const updatedPhotos = allPhotos.map((photo) => {
+      // Ensure we return a new object for the updated photo
       if (photo.id === id) {
-        return { ...photo, picture: "", prompt: "" }; // Removing the picture
+        return { ...photo, picture: "", prompt: "" }; // Remove the picture and prompt
       }
-      return photo;
+      return { ...photo }; // Return a shallow copy of other photos
     });
 
-    // Optionally, sort or move the deleted item to the end
-    const photoWithoutPic = updatedPhotos.find((photo) => photo.id === id);
-    const photosWithPic = updatedPhotos.filter((photo) => photo.id !== id);
-    const finalPhotos = [...photosWithPic, photoWithoutPic]; // Moves the item to the end
+    // Sort the list: photos with pictures first, then empty ones, maintaining ID order
+    const sortedPhotos = updatedPhotos.sort((a, b) => {
+      if (a.picture && b.picture) return a.id - b.id;
 
-    setAllPhotos(finalPhotos);
+      // If only one has a picture, prioritize the one with a picture
+      if (a.picture && !b.picture) return -1;
+      if (!a.picture && b.picture) return 1;
+
+      // If neither has a picture, maintain order by ID
+      return a.id - b.id;
+    });
+
+    // Update the state with the new sorted list
+    setAllPhotos(sortedPhotos);
   };
 
   const renderItem = (item) => {
-    item.key = item.id;
     return (
       <View
         key={item.key}
@@ -111,8 +126,10 @@ export const AddPhotosTwo = ({ navigation }) => {
 
   return (
     <SafeArea>
-      <Header>Show off more about yourself</Header>
+      <BackArrow navigation={navigation} />
       <Container>
+        <Header>Show off more about yourself</Header>
+
         <View
           style={{
             flexDirection: "row",
@@ -142,14 +159,16 @@ export const AddPhotosTwo = ({ navigation }) => {
           <Row>
             <AdvanceToPromptsButton onPress={onHandleNavigation}>
               <PromptText>"{promptGetter(selectedPhotoObject)}"</PromptText>
-              <FontAwesome name="refresh" size={18} color="green" />
+              <FontAwesome name="refresh" size={18} color="#527e65" />
             </AdvanceToPromptsButton>
           </Row>
         )}
 
         <ProceedButton onPress={onHandleContinue}>
-          <ProceedText>Looks good for now!</ProceedText>
+          <ProceedText>Looks good for now</ProceedText>
+          <FontAwesome5 name="arrow-right" size={22} color={"white"} />
         </ProceedButton>
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -158,6 +177,7 @@ export const AddPhotosTwo = ({ navigation }) => {
 const Container = styled(View)`
   width: 100%;
   flex: 1;
+  padding: 15px;
 `;
 
 const Row = styled(View)`
@@ -166,17 +186,14 @@ const Row = styled(View)`
   align-items: center;
   justify-content: center;
   align-self: center;
-  margin-top: 80px;
+  margin-top: 30px;
 `;
 
 const Header = styled(Text)`
-  width: 90%;
+  font-size: 36px;
   color: black;
-  font-family: "poppins-700";
-  font-size: 28px;
-  text-align: center;
-  margin-top: 10px;
-  align-self: center;
+  font-family: poppins-900;
+  margin-left: 5px;
 `;
 
 const AdvanceToPromptsButton = styled(TouchableOpacity)`
@@ -186,19 +203,29 @@ const AdvanceToPromptsButton = styled(TouchableOpacity)`
 `;
 
 const ProceedButton = styled(TouchableOpacity)`
-  margin-top: 30px;
   align-self: center;
+  align-items: center;
+  position: absolute;
+  bottom: 110px;
+  background-color: #527e65;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 30px;
+  flex-direction: row;
 `;
 
 const ProceedText = styled(Text)`
-  color: #527e65;
-  font-family: "poppins-500";
-  font-size: 22px;
+  color: white;
+  font-size: 20px;
+  font-family: poppins-600;
+  margin-right: 20px;
 `;
 
 const PromptText = styled(Text)`
-  color: black;
+  color: #527e65;
   font-family: "poppins-600";
-  font-size: 12px;
+  font-size: 14px;
   margin-right: 10px;
 `;

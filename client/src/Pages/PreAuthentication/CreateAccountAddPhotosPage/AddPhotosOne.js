@@ -12,7 +12,7 @@ import { SafeArea } from "../../../Components/GlobalComponents/SafeArea";
 import ImagePicker from "react-native-image-crop-picker";
 
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { auth, storage } from "../../../Config/firebase";
@@ -90,15 +90,24 @@ export const AddPhotosOne = ({ navigation }) => {
       <BackArrow navigation={navigation} />
 
       <Container>
-        <Header>Show who you are.</Header>
+        <Header>Set your profile picture.</Header>
         <UploadProfilePictureContainer>
-          <UploadProfilePictureButton onPress={selectImageFromGallery}>
+          <UploadProfilePictureButton
+            onPress={selectImageFromGallery}
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5, // For Android
+            }}
+          >
             {!profilePicture ? (
               <>
-                <FontAwesome name="camera" size={74} color="#379E5F" />
-                <PlusLogo>
-                  <PlusLogoText>+</PlusLogoText>
-                </PlusLogo>
+                <FontAwesome name="camera" size={94} color="#527e65" />
+                <PlusLogoContainer>
+                  <PlusLogo name="circle-plus" size={40} color="#79b17c" />
+                </PlusLogoContainer>
               </>
             ) : (
               <ProfilePictureImage
@@ -111,8 +120,13 @@ export const AddPhotosOne = ({ navigation }) => {
           </UploadProfilePictureButton>
         </UploadProfilePictureContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"40%"} />
+        <SubTitle>
+          *Please select a clear picture of your face. Your profile pic will be
+          used for our mandatory facial recognition screen.
+        </SubTitle>
+
+        <ContinueButton onPress={onHandleNavigate} bottom={120} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -121,52 +135,56 @@ export const AddPhotosOne = ({ navigation }) => {
 const Container = styled(View)`
   height: 100%;
   width: 100%;
+  padding: 15px;
 `;
 
 const Header = styled(Text)`
+  font-size: 36px;
   color: black;
-  font-family: "poppins-700";
-  font-size: 34px;
-  margin-top: 25px;
-  text-align: center;
+  font-family: poppins-900;
+  margin-left: 15px;
 `;
 
 const UploadProfilePictureContainer = styled(View)`
   align-items: center;
   justify-content: center;
-  height: 70%;
+  margin-top: 50px;
+  margin-bottom: 50px;
 `;
 
 const UploadProfilePictureButton = styled(TouchableOpacity)`
-  width: 150px;
-  height: 150px;
+  width: 220px;
+  height: 220px;
   background-color: #e3e1e1;
-  border-radius: 100px;
+  border-radius: 1000px;
   text-align: center;
   align-items: center;
   justify-content: center;
 `;
 
-const PlusLogo = styled(View)`
-  height: 28px;
-  width: 28px;
-  align-items: center;
-  justify-content: center;
+const PlusLogo = styled(FontAwesome6)`
+  border-radius: 100px;
+`;
+
+const PlusLogoContainer = styled(View)`
+  background-color: white;
+  bottom: 55px;
+  right: 45px;
+  border-radius: 100px;
   position: absolute;
-  bottom: 30px;
-  right: 20px;
-  border-radius: 100px;
-  background-color: #66bf88;
-`;
-
-const PlusLogoText = styled(Text)`
-  color: white;
-  font-size: 22px;
-  text-align: center;
 `;
 
 const ProfilePictureImage = styled(FastImage)`
   width: 100%;
   height: 100%;
-  border-radius: 100px;
+  border-radius: 10000px;
+`;
+
+const SubTitle = styled(Text)`
+  font-size: 14px;
+  color: black;
+  font-family: poppins-500;
+  text-align: center;
+  width: 80%;
+  align-self: center;
 `;

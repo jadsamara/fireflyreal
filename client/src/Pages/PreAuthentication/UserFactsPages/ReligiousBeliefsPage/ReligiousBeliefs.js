@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { AuthenticationStackContext } from "../../../../Context/AuthenticationStackContext";
@@ -11,7 +11,6 @@ import {
 } from "../../../../Components/PreAuthentication";
 
 import { SafeArea } from "../../../../Components/GlobalComponents/SafeArea";
-import { Ionicons } from "@expo/vector-icons";
 
 export const ReligiousBeliefs = ({ navigation }) => {
   const { userReligion, setUserReligion } = useContext(
@@ -62,29 +61,30 @@ export const ReligiousBeliefs = ({ navigation }) => {
               <Tag
                 key={res}
                 backgroundColor={
-                  userReligion.religion === res ? "#527e65" : "gray"
+                  userReligion.religion === res ? "#527e65" : "#e2e2e2"
                 }
                 onPress={() => changeReligion(res)}
               >
-                <TagText>{res}</TagText>
+                <TagText
+                  color={userReligion.religion === res ? "white" : "black"}
+                >
+                  {res}
+                </TagText>
               </Tag>
             );
           })}
         </CurrentTagContainer>
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userReligion.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch
+              value={!userReligion.isHidden}
+              onValueChange={toggleHidden}
+            />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -125,8 +125,8 @@ const Tag = styled(TouchableOpacity)`
 `;
 
 const TagText = styled(Text)`
-  color: white;
-  font-family: poppins-600;
+  color: ${({ color }) => color};
+  font-family: poppins-500;
   font-size: 12px;
 `;
 
@@ -149,5 +149,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import styled from "styled-components";
 
-export const ProgressBar = ({ width, bottom }) => {
+export const ProgressBarFixed = ({ width, bottom }) => {
   return (
     <Container bottom={bottom}>
       <Bar>
@@ -18,12 +18,16 @@ export const ProgressBar = ({ width, bottom }) => {
 };
 
 const Container = styled(View)`
+  background-color: white;
   position: absolute;
   align-self: center;
   align-items: center;
-  width: 85%;
-  height: 50px;
+  justify-content: center;
+  width: 100%;
+  height: 80px;
   bottom: ${({ bottom }) => (bottom ? `${bottom}px` : `0px`)};
+  padding-left: 30px;
+  padding-right: 30px;
 `;
 
 const Bar = styled(View)`
@@ -32,6 +36,7 @@ const Bar = styled(View)`
   border-radius: 5px;
   border-width: 0.5px;
   border-color: #91ffc1;
+  background-color: white;
 `;
 
 const FilledPortion = styled(View)`

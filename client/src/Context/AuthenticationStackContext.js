@@ -11,6 +11,9 @@ export const AuthenticationStackProvider = ({ children }) => {
 
   const [profilePicture, setProfilePicture] = useState("");
 
+  const [countryCode, setCountryCode] = useState("+1");
+  const [countryFlag, setCountryFlag] = useState("CA");
+
   const [profilePictureURI, setProfilePictureURI] = useState("");
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
@@ -21,6 +24,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 1,
       picture: "",
+      key: 1,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -28,6 +32,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 2,
       picture: "",
+      key: 2,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -35,6 +40,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 3,
       picture: "",
+      key: 3,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -42,6 +48,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 4,
       picture: "",
+      key: 4,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -49,6 +56,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 5,
       picture: "",
+      key: 5,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -56,6 +64,7 @@ export const AuthenticationStackProvider = ({ children }) => {
     {
       id: 6,
       picture: "",
+      key: 6,
       prompt: "Add Prompt",
       disabledDrag: true, // Set to true if no picture, false otherwise
       disabledReSorted: true,
@@ -71,7 +80,7 @@ export const AuthenticationStackProvider = ({ children }) => {
   });
 
   const [userEthnicity, setUserEthnicity] = useState({
-    ethnicity: "",
+    ethnicity: [],
     isHidden: false,
   });
 
@@ -152,6 +161,10 @@ export const AuthenticationStackProvider = ({ children }) => {
         setUserWork,
         userJobTitle,
         setUserJobTitle,
+        countryCode,
+        setCountryCode,
+        countryFlag,
+        setCountryFlag,
       }}
     >
       {children}

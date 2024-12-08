@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { AuthenticationStackContext } from "../../../../Context/AuthenticationStackContext";
@@ -58,19 +58,16 @@ export const JobTitle = ({ navigation }) => {
 
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userJobTitle.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch
+              value={!userJobTitle.isHidden}
+              onValueChange={toggleHidden}
+            />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -110,9 +107,10 @@ const InputContainer = styled(View)`
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
+  font-family: poppins-500;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -134,5 +132,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

@@ -11,6 +11,7 @@ import {
 } from "../../../../Components/PreAuthentication";
 
 import { SafeArea } from "../../../../Components/GlobalComponents/SafeArea";
+import { Entypo } from "@expo/vector-icons";
 
 export const HomeTown = ({ navigation }) => {
   const { homeTown, setHomeTown } = useContext(AuthenticationStackContext);
@@ -26,23 +27,24 @@ export const HomeTown = ({ navigation }) => {
       <Container>
         <Title>Where are you from?</Title>
         <HeaderContainer>
-          <HeaderText>
-            Please enter your hometown or the place where you live currently.
-          </HeaderText>
+          <HeaderText>Please enter your hometown.</HeaderText>
         </HeaderContainer>
         <InputContainer>
-          <TextInputComponent
-            onChangeText={setHomeTown}
-            value={homeTown}
-            maxLength={60}
-            placeholder="City, Country"
-            placeholderTextColor="gray"
-            returnKeyType={"default"}
-          />
+          <TextInputContainer>
+            <Entypo name="home" size={24} color="#527e65" />
+            <TextInputComponent
+              onChangeText={setHomeTown}
+              value={homeTown}
+              maxLength={60}
+              placeholder="City, Country"
+              placeholderTextColor="gray"
+              returnKeyType={"default"}
+            />
+          </TextInputContainer>
         </InputContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={120} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -54,7 +56,7 @@ const Container = styled(View)`
 `;
 
 const Title = styled(Text)`
-  font-size: 39px;
+  font-size: 38px;
   color: black;
   font-family: poppins-900;
   margin-left: 15px;
@@ -76,13 +78,25 @@ const InputContainer = styled(View)`
   width: 100%;
   height: 70px;
   align-items: center;
+  justify-content: center;
   margin-top: 45px;
+`;
+
+const TextInputContainer = styled(View)`
+  width: 90%;
+  height: 50px;
+  background-color: #ebebeb;
+  border-radius: 16px;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 15px;
 `;
 
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
-  padding-left: 20px;
+  font-family: poppins-600;
+  padding-left: 10px;
 `;

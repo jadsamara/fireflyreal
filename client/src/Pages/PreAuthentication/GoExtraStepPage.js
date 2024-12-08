@@ -78,7 +78,7 @@ export const GoExtraStepPage = ({ navigation }) => {
       <SkipButton onPress={onHandleNavigateSkip}>
         <SkipButtonText>Skip for now</SkipButtonText>
       </SkipButton>
-      <ContinueButton onPress={onHandleNavigate} />
+      <ContinueButton onPress={onHandleNavigate} bottom={90} />
     </SafeArea>
   );
 };

@@ -5,7 +5,11 @@ import styled from "styled-components/native";
 import Selfie from "../../Assets/selfie.png";
 import ScreeningSelfie from "../../Assets/screeningselfie.png";
 import { SafeArea } from "../../Components/GlobalComponents";
-import { BackArrow, ContinueButton } from "../../Components/PreAuthentication";
+import {
+  BackArrow,
+  ContinueButton,
+  ProgressBarFixed,
+} from "../../Components/PreAuthentication";
 
 export const MandatoryScreeningOne = ({ navigation }) => {
   const onHandleNavigate = () => {
@@ -19,12 +23,12 @@ export const MandatoryScreeningOne = ({ navigation }) => {
         <Container>
           <TitleText>Complete Mandatory Screening</TitleText>
           <SubTitleText>
-            We require all users to verify their identity for the safety and
-            security of our app.
+            We require all users to verify their identity for the{" "}
+            <SubTitleTextBold>safety and security</SubTitleTextBold> of our app.
           </SubTitleText>
 
           <SectionOne>
-            <Label>1. Take A Selfie </Label>
+            <LabelBold>1. Take A Selfie </LabelBold>
             <Row>
               <ImageContainer source={Selfie} />
               <Paragraph>
@@ -36,7 +40,7 @@ export const MandatoryScreeningOne = ({ navigation }) => {
           </SectionOne>
 
           <Section>
-            <Label>2. Selfie to Profile Picture Match</Label>
+            <LabelBold>2. Selfie to Profile Picture Match</LabelBold>
             <Row>
               <ImageContainer source={ScreeningSelfie} />
               <View>
@@ -53,12 +57,16 @@ export const MandatoryScreeningOne = ({ navigation }) => {
           <BottomFooterText>
             We will store your verification selfie for the duration of your
             account to ensure proper auditing and management of our verification
-            feature. Additionally, we will retain the outcome of the
-            verification process (whether verified or not).
+            feature.
           </BottomFooterText>
+          <BottomFooterTextTwo>
+            Additionally, we will retain the outcome of the verification process
+            (whether verified or not).
+          </BottomFooterTextTwo>
         </Container>
-        <ContinueButton onPress={onHandleNavigate} />
+        <ContinueButton onPress={onHandleNavigate} bottom={90} />
       </ScrollContainer>
+      <ProgressBarFixed width={"10%"} bottom={0} backgroundColor="white" />
     </SafeArea>
   );
 };
@@ -70,44 +78,49 @@ const Container = styled(View)`
 `;
 
 const TitleText = styled(Text)`
-  font-size: 24px;
+  font-size: 30px;
   color: black;
-  font-family: poppins-700;
-  margin-left: 10px;
-  margin-top: 20px;
-  width: 100%;
+  font-family: poppins-900;
+  margin-left: 15px;
 `;
 
 const SubTitleText = styled(Text)`
-  font-size: 12px;
+  font-size: 16px;
   color: black;
   font-family: poppins-400;
-  margin-top: 10px;
   align-self: center;
-  padding: 10px;
+  margin-left: 15px;
+  margin-top: 20px;
+`;
+
+const SubTitleTextBold = styled(Text)`
+  font-size: 16px;
+  color: #527e65;
+  font-family: poppins-700;
 `;
 
 const SectionOne = styled(View)`
   flex-direction: column;
-  margin-top: 60px;
+  margin-top: 25px;
 `;
 
 const Section = styled(View)`
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 40px;
 `;
 
-const Label = styled(Text)`
-  font-size: 16px;
-  color: black;
-  font-family: poppins-500;
-  margin-left: 20px;
+const LabelBold = styled(Text)`
+  color: #527e65;
+  font-family: poppins-800;
+  font-size: 18px;
+  margin-left: 15px;
 `;
 
 const Row = styled(View)`
   flex-direction: row;
-  justify-content: space-around;
-  margin-top: 20px;
+  justify-content: space-between;
+  margin-top: 25px;
+  padding-left: 25px;
 `;
 
 const ImageContainer = styled(Image)`
@@ -117,25 +130,38 @@ const ImageContainer = styled(Image)`
 
 const Paragraph = styled(Text)`
   text-align: center;
-  font-size: 12px;
-  width: 210px;
-  font-family: poppins-400;
+  font-size: 13px;
+  width: 150px;
+  font-family: poppins-500;
+  align-self: flex-end;
+  margin-right: 20px;
 `;
 
 const ParagraphMargined = styled(Text)`
   text-align: center;
-  font-size: 12px;
-  width: 210px;
-  font-family: poppins-700;
-  margin-top: 30px;
+  font-size: 13px;
+  width: 150px;
+  font-family: poppins-800;
+  align-self: flex-end;
+  margin-right: 20px;
+  margin-top: 20px;
 `;
 
 const BottomFooterText = styled(Text)`
   text-align: center;
-  font-size: 10px;
-  width: 95%;
-  font-family: poppins-400;
+  font-size: 13px;
+  width: 90%;
+  font-family: poppins-600;
   align-self: center;
-  margin-top: 60px;
-  margin-bottom: 200px;
+  margin-top: 50px;
+`;
+
+const BottomFooterTextTwo = styled(Text)`
+  text-align: center;
+  font-size: 13px;
+  width: 90%;
+  font-family: poppins-600;
+  align-self: center;
+  margin-top: 30px;
+  margin-bottom: 180px;
 `;

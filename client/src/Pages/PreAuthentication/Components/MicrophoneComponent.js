@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Easing } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { Audio } from "expo-av";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+
+import { WaveComponent } from "./WaveComponent";
 
 export const MicrophoneComponent = ({ recordedURI, setRecordedURI }) => {
   const [recording, setRecording] = useState();
@@ -12,45 +14,6 @@ export const MicrophoneComponent = ({ recordedURI, setRecordedURI }) => {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [playbackPosition, setPlaybackPosition] = useState(0);
   const [playbackDuration, setPlaybackDuration] = useState(0);
-  const [scaleValue] = useState(new Animated.Value(1));
-
-  const [waveAnimation] = useState(new Animated.Value(0)); // Animation control
-
-  useEffect(() => {
-    if (recording || isPlaying) {
-      startWaveAnimation(); // Start animation when recording or playing
-    } else {
-      stopWaveAnimation(); // Stop animation otherwise
-    }
-  }, [recording, isPlaying]);
-
-  const startWaveAnimation = () => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(waveAnimation, {
-          toValue: 1,
-          duration: 500,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-        Animated.timing(waveAnimation, {
-          toValue: 0,
-          duration: 500,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  };
-
-  const stopWaveAnimation = () => {
-    waveAnimation.stopAnimation();
-  };
-
-  const waveScale = waveAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 1.5], // Scale wave sizes
-  });
 
   const formatTime = (millis) => {
     const minutes = Math.floor(millis / 60000);
@@ -201,20 +164,6 @@ export const MicrophoneComponent = ({ recordedURI, setRecordedURI }) => {
     }
   };
 
-  const handlePressIn = () => {
-    Animated.spring(scaleValue, {
-      toValue: 0.9,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-  };
-
   const resetRecording = async () => {
     if (sound) {
       await sound.unloadAsync(); // Unload the sound if it exists
@@ -239,34 +188,28 @@ export const MicrophoneComponent = ({ recordedURI, setRecordedURI }) => {
         </VoiceRecordTimer>
 
         <VoiceWaveContainer>
-          {[...Array(5)].map((_, index) => (
-            <AnimatedWave
-              key={index}
-              style={{
-                transform: [{ scaleY: waveScale }], // Apply scale animation
-              }}
-            />
-          ))}
+          <WaveComponent recording={!!recording} />
         </VoiceWaveContainer>
+        {recording ? (
+          <VoiceRecordText>Tap to stop recording</VoiceRecordText>
+        ) : recordedURI && !isPlaying ? (
+          <ResetButton onPress={resetRecording}>
+            <VoiceRecordText>Redo recording</VoiceRecordText>
+          </ResetButton>
+        ) : (
+          <VoiceRecordText>Tap to start recording</VoiceRecordText>
+        )}
       </VoiceRecordContainer>
 
-      {recordedURI && !isPlaying && (
-        <ResetButton onPress={resetRecording}>
-          <FontAwesome name="refresh" size={30} color="white" />
-        </ResetButton>
-      )}
-
-      <VoiceRecordingView style={{ transform: [{ scale: scaleValue }] }}>
-        <VoiceRecordButton
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          onPress={onHandleMicrophoneButton}
-        >
+      <VoiceRecordingView>
+        <VoiceRecordButton onPress={onHandleMicrophoneButton}>
           {recordedURI ? (
             isPlaying ? (
               <FontAwesome name="pause" size={50} color="white" />
             ) : (
-              <FontAwesome name="play" size={50} color="white" />
+              <View style={{ marginLeft: 8 }}>
+                <FontAwesome5 name="play" size={44} color="white" />
+              </View>
             )
           ) : !recording ? (
             <FontAwesome name="microphone" size={50} color="white" />
@@ -275,21 +218,16 @@ export const MicrophoneComponent = ({ recordedURI, setRecordedURI }) => {
           )}
         </VoiceRecordButton>
       </VoiceRecordingView>
-      {recording ? (
-        <VoiceRecordText>Tap to stop recording</VoiceRecordText>
-      ) : (
-        <VoiceRecordText>Tap to start recording</VoiceRecordText>
-      )}
     </>
   );
 };
 
 const VoiceRecordContainer = styled(View)`
   width: 90%;
-  height: 230px;
+  height: 260px;
   margin-top: 30px;
   padding: 5px;
-  border-color: #707070;
+  border-color: rgba(112, 112, 112, 0.3);
   border-width: 0.5px;
   border-radius: 10px;
   align-items: center;
@@ -302,16 +240,17 @@ const VoiceRecordTimer = styled(Text)`
 
 const VoiceRecordText = styled(Text)`
   font-size: 10px;
-  margin-top: 60px;
+  font-family: poppins-500;
+  margin-top: 30px;
   color: #122231;
 `;
 
-const VoiceRecordingView = styled(Animated.View)`
+const VoiceRecordingView = styled(View)`
   height: 90px;
   width: 90px;
   border-radius: 45px;
   background-color: #3a7c78;
-  bottom: 0px;
+  bottom: -10px;
   position: absolute;
   align-items: center;
   justify-content: center;
@@ -321,7 +260,7 @@ const VoiceRecordButton = styled(TouchableOpacity)`
   height: 90px;
   width: 90px;
   border-radius: 45px;
-  background-color: #3a7c78;
+  background-color: #79d17c;
   bottom: 0px;
   position: absolute;
   align-items: center;
@@ -334,25 +273,7 @@ const VoiceWaveContainer = styled(View)`
   align-items: center;
   width: 80%;
   height: 100px;
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 
-const AnimatedWave = styled(Animated.View)`
-  width: 10px;
-  height: 50px;
-  background-color: #3a7c78;
-  border-radius: 5px;
-`;
-
-const ResetButton = styled(TouchableOpacity)`
-  height: 60px;
-  width: 60px;
-  border-radius: 30px;
-  background-color: #f44336;
-
-  bottom: 20px;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  left: 50px;
-`;
+const ResetButton = styled(TouchableOpacity)``;

@@ -29,7 +29,7 @@ export const FaceScanSuccessPage = ({ navigation }) => {
           space.
         </BottomFooterText>
       </Container>
-      <ContinueButton onPress={onHandleNavigate} />
+      <ContinueButton onPress={onHandleNavigate} bottom={120} />
     </SafeArea>
   );
 };

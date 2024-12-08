@@ -45,6 +45,7 @@ export const SchoolPage = ({ navigation }) => {
             Please enter the school name you recently attended.
           </HeaderText>
         </HeaderContainer>
+
         <InputContainer>
           <TextInputComponent
             onChangeText={onChangeText}
@@ -69,8 +70,8 @@ export const SchoolPage = ({ navigation }) => {
           </Row>
         </IsHiddenContainer>
 
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -104,15 +105,16 @@ const InputContainer = styled(View)`
   width: 100%;
   height: 70px;
   align-items: center;
-  margin-top: 45px;
+  margin-top: 40px;
 `;
 
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
+  font-family: poppins-400;
 `;
 
 const IsHiddenContainer = styled(View)`

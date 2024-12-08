@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { AuthenticationStackContext } from "../../../../Context/AuthenticationStackContext";
@@ -59,29 +59,34 @@ export const HighestSchoolDegree = ({ navigation }) => {
                 backgroundColor={
                   userHighestSchoolDegree.schoolGrad === res
                     ? "#527e65"
-                    : "gray"
+                    : "#e2e2e2"
                 }
                 onPress={() => changeHighestLevelAttained(res)}
               >
-                <TagText>{res}</TagText>
+                <TagText
+                  color={
+                    userHighestSchoolDegree.schoolGrad === res
+                      ? "white"
+                      : "black"
+                  }
+                >
+                  {res}
+                </TagText>
               </Tag>
             );
           })}
         </CurrentTagContainer>
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userHighestSchoolDegree.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch
+              value={!userHighestSchoolDegree.isHidden}
+              onValueChange={toggleHidden}
+            />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
-        <ContinueButton onPress={onHandleNavigate} />
-        <ProgressBar width={"30%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );
@@ -122,9 +127,9 @@ const Tag = styled(TouchableOpacity)`
 `;
 
 const TagText = styled(Text)`
-  color: white;
-  font-family: poppins-600;
-  font-size: 11px;
+  color: ${({ color }) => color};
+  font-family: poppins-500;
+  font-size: 12px;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -146,5 +151,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

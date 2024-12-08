@@ -55,8 +55,8 @@ export const CreateAccountPageSeven = ({ navigation }) => {
           <MaxCharText>{bio.length}/250 char</MaxCharText>
         </InputContainer>
 
-        <ContinueButton onPress={onHandleNavigate} bio={bio} />
-        <ProgressBar width={"80%"} />
+        <ContinueButton onPress={onHandleNavigate} bottom={80} />
+        <ProgressBar width={"10%"} bottom={0} />
       </Container>
     </SafeArea>
   );

@@ -5,6 +5,7 @@ import {
   PanResponder,
   Animated,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import styled from "styled-components";
 import {
@@ -107,39 +108,40 @@ export const BottomDrawerActive = ({ setIsModalActive, participant = {} }) => {
         <CenteredView>
           <AntDesign name="caretdown" size={14} color="gray" />
         </CenteredView>
-        <NameText>
-          {name}, {calculateAge(age)}
-        </NameText>
-        <Row>
-          <AntDesign name="star" size={18} color="black" />
-          <BodyOneText>
-            {parseFloat(averageUserRating).toFixed(1)} ({pastSparks.length}{" "}
-            sparks)
-          </BodyOneText>
-        </Row>
-        <Row>
-          <FontAwesome6 name="house-chimney" size={14} color="black" />
-          <BodyOneText>{homeTown}</BodyOneText>
-        </Row>
-        <ListenRow>
-          <ListenRowTwo onPress={handlePlayPauseAudio}>
-            <MaterialCommunityIcons
-              name={isPlaying ? "volume-high" : "play-pause"}
-              size={20}
-              color={isPlaying ? "#00ceff" : "black"}
-            />
-            <BodyTwoText color={isPlaying ? "#00ceff" : "black"}>
-              "{voiceAudioObj.voicePrompt}"
-            </BodyTwoText>
-          </ListenRowTwo>
-          <TouchableOpacity onPress={handlePlayPauseAudio}>
-            <BodyThreeText color={isPlaying ? "#00ceff" : "black"}>
-              {isPlaying ? "(pause audio)" : "(play audio)"}
-            </BodyThreeText>
-          </TouchableOpacity>
-        </ListenRow>
-        <BioText>{userBio}</BioText>
       </Animated.View>
+
+      <NameText>
+        {name}, {calculateAge(age)}
+      </NameText>
+      <Row>
+        <AntDesign name="star" size={18} color="black" />
+        <BodyOneText>
+          {parseFloat(averageUserRating).toFixed(1)} ({pastSparks.length}{" "}
+          sparks)
+        </BodyOneText>
+      </Row>
+      <Row>
+        <FontAwesome6 name="house-chimney" size={14} color="black" />
+        <BodyOneText>{homeTown}</BodyOneText>
+      </Row>
+      <ListenRow>
+        <ListenRowTwo onPress={handlePlayPauseAudio}>
+          <MaterialCommunityIcons
+            name={isPlaying ? "volume-high" : "play-pause"}
+            size={20}
+            color={isPlaying ? "#00ceff" : "black"}
+          />
+          <BodyTwoText color={isPlaying ? "#00ceff" : "black"}>
+            "{voiceAudioObj.voicePrompt}"
+          </BodyTwoText>
+        </ListenRowTwo>
+        <TouchableOpacity onPress={handlePlayPauseAudio}>
+          <BodyThreeText color={isPlaying ? "#00ceff" : "black"}>
+            {isPlaying ? "(pause audio)" : "(play audio)"}
+          </BodyThreeText>
+        </TouchableOpacity>
+      </ListenRow>
+      <BioText>{userBio}</BioText>
     </Container>
   );
 };
@@ -159,6 +161,7 @@ const CenteredView = styled(View)`
   align-self: center;
   justify-content: center;
   align-items: center;
+  height: 50px;
 `;
 
 const NameText = styled(Text)`

@@ -75,16 +75,6 @@ export const SparkCard = () => {
     return participants;
   };
 
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const options = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    };
-    return new Intl.DateTimeFormat("en-US", options).format(date);
-  };
-
   let formattedDate = "";
   let minimumDate = "";
 

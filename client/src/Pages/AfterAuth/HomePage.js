@@ -127,8 +127,8 @@ const HeaderText = styled(Text)`
 `;
 
 const SearchBarContainer = styled(View)`
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const SparkCardContainer = styled(View)`

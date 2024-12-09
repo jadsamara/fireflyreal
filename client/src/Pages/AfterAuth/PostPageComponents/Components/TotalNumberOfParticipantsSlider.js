@@ -12,8 +12,8 @@ export const TotalNumberOfParticipantsSlider = ({
     <SliderContainer>
       <MaterialIcons name="people" size={28} color="#527E65" />
       <MultiSlider
-        values={[localNumberOfParticipants]}
-        min={1}
+        values={[localNumberOfParticipants + 1]}
+        min={2}
         max={11}
         step={1}
         onValuesChange={(values) => setLocalNumberOfParticipants(values[0])}

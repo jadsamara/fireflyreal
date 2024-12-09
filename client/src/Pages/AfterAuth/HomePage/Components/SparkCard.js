@@ -1,13 +1,10 @@
 import { View, Text, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import {
-  Ionicons,
-  FontAwesome,
-  AntDesign,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { getUserInfo } from "../../../../Functions/GetUserInfo";
+
+import SparkBlur from "../../../../Assets/sparkblur.png";
 
 export const SparkCard = ({ spark = {} }) => {
   const {
@@ -84,7 +81,7 @@ export const SparkCard = ({ spark = {} }) => {
 
     // Render profile pictures
     for (let i = 0; i < numProfilePictures; i++) {
-      if (i < 3) {
+      if (i < 4) {
         participants.push(
           <ParticipantProfilePicture key={i}>
             <ProfileImage source={{ uri: profilePictures[i] }} />
@@ -96,7 +93,7 @@ export const SparkCard = ({ spark = {} }) => {
     // Render placeholders
     for (
       let i = numProfilePictures;
-      i < Math.min(3, numProfilePictures + remainingSlots);
+      i < Math.min(4, numProfilePictures + remainingSlots);
       i++
     ) {
       participants.push(
@@ -107,11 +104,11 @@ export const SparkCard = ({ spark = {} }) => {
     }
 
     // Render extra users indicator
-    if (remainingSlots > 3 - numProfilePictures) {
+    if (remainingSlots > 4 - numProfilePictures) {
       participants.push(
         <ParticipantProfilePicture key="extra">
           <ExtraUsersText>
-            {remainingSlots - (3 - numProfilePictures)}+
+            {remainingSlots - (4 - numProfilePictures)}+
           </ExtraUsersText>
         </ParticipantProfilePicture>
       );
@@ -124,6 +121,9 @@ export const SparkCard = ({ spark = {} }) => {
     <Container>
       <SparkImageContainer>
         <SparkImage source={{ uri: sparkImage }} />
+        <SparkBlurContainer>
+          <SparkBlurImage source={SparkBlur} />
+        </SparkBlurContainer>
         <SparkScheduledDate>
           <SparkScheduledText>{formattedDate}</SparkScheduledText>
         </SparkScheduledDate>
@@ -140,7 +140,7 @@ export const SparkCard = ({ spark = {} }) => {
           <LocationDistanceContainer>
             <SparkLocationText>{locationName}</SparkLocationText>
             <SparkDistanceInKMText>
-              {`(${parseFloat(distance).toFixed(2)}) km`}
+              {`(${parseFloat(distance).toFixed(1)} km)`}
             </SparkDistanceInKMText>
           </LocationDistanceContainer>
         </UpperTextRow>
@@ -148,14 +148,15 @@ export const SparkCard = ({ spark = {} }) => {
           <ParticipantsProfilePicturesContainer>
             {renderParticipants()}
           </ParticipantsProfilePicturesContainer>
+        </ParticipantsAndGroupContainer>
+        <TagContainer>
           <GroupPeopleContainer>
-            <FontAwesome name="group" size={20} color="#527E65" />
+            <MaterialIcons name="groups" size={28} color="#527E65" />
+
             <AmountOfPeopleText>
               {totalNumberOfCurrentParticipants}/{totalNumberOfParticipants}
             </AmountOfPeopleText>
           </GroupPeopleContainer>
-        </ParticipantsAndGroupContainer>
-        <TagContainer>
           {tags.slice(0, 2).map((res, index) => (
             <Tag key={index}>
               <TagText>{res.text}</TagText>
@@ -168,7 +169,7 @@ export const SparkCard = ({ spark = {} }) => {
 };
 
 const Container = styled(View)`
-  height: 270px;
+  height: 280px;
   width: 100%;
 `;
 
@@ -199,7 +200,7 @@ const SparkScheduledDate = styled(View)`
 
 const SparkScheduledText = styled(Text)`
   color: white;
-  font-size: 9px;
+  font-size: 10px;
   font-family: poppins-800;
 `;
 
@@ -211,16 +212,16 @@ const SparkScheduledDateDays = styled(View)`
   right: 15px;
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 16px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 10px;
   flex-direction: row;
   align-items: center;
 `;
 
 const SparkScheduledTextDays = styled(Text)`
   color: white;
-  font-size: 9px;
+  font-size: 10px;
   margin-left: 5px;
   font-family: poppins-800;
 `;
@@ -259,20 +260,20 @@ const ProfilePictureHost = styled(Image)`
 `;
 
 const HostSparkText = styled(Text)`
-  font-size: 12px;
-  font-family: poppins-500;
+  font-size: 15px;
+  font-family: poppins-600;
   margin-left: 3px;
 `;
 
 const SparkLocationText = styled(Text)`
-  font-size: 9px;
+  font-size: 13px;
   font-family: poppins-500;
   margin-bottom: 2px;
   color: #527e65;
 `;
 
 const SparkDistanceInKMText = styled(Text)`
-  font-size: 7px;
+  font-size: 10px;
   font-family: poppins-500;
   margin-left: 4px;
   margin-bottom: 1px;
@@ -312,12 +313,13 @@ const GroupPeopleContainer = styled(View)`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  margin-left: 20px;
+  right: 5px;
+  position: absolute;
 `;
 
 const AmountOfPeopleText = styled(Text)`
-  font-size: 12px;
-  font-family: poppins-600;
+  font-size: 14px;
+  font-family: poppins-700;
   color: #527e65;
   margin-left: 5px;
 `;
@@ -325,16 +327,17 @@ const AmountOfPeopleText = styled(Text)`
 const TagContainer = styled(View)`
   flex-direction: row;
   margin-top: 10px;
+  align-items: center;
 `;
 
 const Tag = styled(View)`
   background-color: #527e65;
   justify-content: center;
   align-items: center;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
   margin-left: 5px;
   border-radius: 15px;
 `;
@@ -355,4 +358,18 @@ const LocationDistanceContainer = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+`;
+
+const SparkBlurContainer = styled(View)`
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0px;
+`;
+
+const SparkBlurImage = styled(Image)`
+  height: 100%;
+  width: 100%;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 `;

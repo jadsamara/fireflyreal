@@ -22,9 +22,18 @@ export const HomePageFilterSearchBar = ({
         placeholder={placeholder}
         value={searchKeyword}
         onChangeText={setSearchKeyword}
+        theme={{ colors: { primary: "green" } }}
         mode="bar"
-        style={{ fontSize: 12 }}
-        inputStyle={{ fontSize: 12 }}
+        style={{
+          height: 50,
+          fontSize: 12,
+          fontFamily: "poppins-600-italic",
+        }}
+        inputStyle={{
+          minHeight: 0, // Add this
+          fontSize: 12,
+          fontFamily: "poppins-600-italic",
+        }}
       />
     </SearchBarContainer>
   );

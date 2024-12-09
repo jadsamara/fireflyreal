@@ -9,10 +9,9 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import styled from "styled-components/native";
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
 
-import { BottomDrawerActive } from "./BottomDrawerActive";
 import FastImage from "react-native-fast-image";
 
-export const BodyWithModal = ({ navigation, setIsModalActive }) => {
+export const BodyWithModal = () => {
   const { allPhotos, profilePicture } = useContext(AuthenticationStackContext);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -97,8 +96,6 @@ export const BodyWithModal = ({ navigation, setIsModalActive }) => {
             {validPhotos[currentIndex].prompt}
           </MessageBubbleText>
         </MessageBubble>
-
-        <BottomDrawerActive setIsModalActive={setIsModalActive} />
       </AnimatedPhotoImage>
     </Container>
   );

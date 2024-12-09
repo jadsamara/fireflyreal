@@ -9,9 +9,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import FastImage from "react-native-fast-image";
 
-import { BottomDrawerActive } from "./BottomDrawerActive";
-
-export const BodyWithModal = ({ setIsModalActive, participant = {} }) => {
+export const BodyWithModal = ({ participant = {} }) => {
   const { profilePicture = "", allPhotos = [] } = participant;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -89,7 +87,10 @@ export const BodyWithModal = ({ setIsModalActive, participant = {} }) => {
         </IndexBarRow>
         <ProfilePictureContainer>
           <ProfilePictureImage
-            source={{ uri: profilePicture, priority: FastImage.priority.high }}
+            source={{
+              uri: profilePicture,
+              priority: FastImage.priority.high,
+            }}
             resizeMode={FastImage.resizeMode.cover}
           />
         </ProfilePictureContainer>
@@ -98,11 +99,6 @@ export const BodyWithModal = ({ setIsModalActive, participant = {} }) => {
             {validPhotos[currentIndex]?.prompt}
           </MessageBubbleText>
         </MessageBubble>
-
-        <BottomDrawerActive
-          setIsModalActive={setIsModalActive}
-          participant={participant}
-        />
       </AnimatedPhotoImage>
     </Container>
   );

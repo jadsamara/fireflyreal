@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import {
   View,
   TextInput,
@@ -27,45 +27,47 @@ export const LanguagePage = ({ navigation }) => {
     AuthenticationStackContext
   );
   const [textChange, setTextChange] = useState("");
-  const [listOfLanguages, setListOfLanguages] = useState(ListOfLanguages);
 
-  const onHandleNavigate = () => {
-    navigation.navigate("EthnicityPage");
-  };
+  // Filtered language list computed dynamically
+  const filteredLanguages = useMemo(() => {
+    const availableLanguages = ListOfLanguages.filter(
+      (language) => !languagesSpoken.languagesList.includes(language) // Exclude selected languages
+    );
+
+    if (!textChange) return availableLanguages;
+
+    return availableLanguages.filter((language) =>
+      language.toLowerCase().includes(textChange.toLowerCase())
+    );
+  }, [textChange, languagesSpoken.languagesList]);
 
   const handleAddLanguage = (item) => {
-    if (languagesSpoken.languagesList.length < 6) {
-      setLanguagesSpoken((prevState) => ({
-        ...prevState,
-        languagesList: [...prevState.languagesList, item],
-      }));
+    if (languagesSpoken.languagesList.length >= 6) return;
 
-      const updatedLanguages = listOfLanguages.filter(
-        (language) => language !== item
-      );
-      setListOfLanguages(updatedLanguages);
-      setTextChange(""); // Clear input field after adding
-    }
+    setLanguagesSpoken((prev) => ({
+      ...prev,
+      languagesList: [...prev.languagesList, item],
+    }));
+
+    setTextChange(""); // Clear input
   };
 
   const handleRemoveLanguage = (item) => {
-    // Remove the selected language from `languagesSpoken.languagesList`
-    setLanguagesSpoken((prevState) => ({
-      ...prevState,
-      languagesList: prevState.languagesList.filter(
-        (language) => language !== item
-      ),
+    setLanguagesSpoken((prev) => ({
+      ...prev,
+      languagesList: prev.languagesList.filter((language) => language !== item),
     }));
-
-    // Add the removed language back to `listOfLanguages`
-    setListOfLanguages((prev) => [...prev, item].sort());
   };
 
   const toggleHidden = () => {
-    setLanguagesSpoken((prevState) => ({
-      ...prevState,
-      isHidden: !prevState.isHidden,
+    setLanguagesSpoken((prev) => ({
+      ...prev,
+      isHidden: !prev.isHidden,
     }));
+  };
+
+  const onHandleNavigate = () => {
+    navigation.navigate("EthnicityPage");
   };
 
   return (
@@ -74,6 +76,8 @@ export const LanguagePage = ({ navigation }) => {
 
       <Container>
         <Title>Languages Spoken</Title>
+
+        {/* Language Input */}
         <InputContainer>
           <TextInputComponent
             onChangeText={setTextChange}
@@ -82,40 +86,39 @@ export const LanguagePage = ({ navigation }) => {
             placeholder="Add Language"
             placeholderTextColor="gray"
             returnKeyType={"default"}
-            onSubmitEditing={handleAddLanguage}
           />
         </InputContainer>
+
+        {/* Filtered Languages */}
         <CurrentTagContainer>
           <FlatList
-            horizontal={true}
+            horizontal
             showsHorizontalScrollIndicator={false}
-            data={listOfLanguages}
-            keyExtractor={(item, index) => index}
-            renderItem={({ item, index }) => {
-              return (
-                <TagDisabled
-                  key={index}
-                  onPress={() => handleAddLanguage(item)}
-                >
-                  <TagDisabledText>{item}</TagDisabledText>
-                </TagDisabled>
-              );
-            }}
+            data={filteredLanguages}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TagDisabled onPress={() => handleAddLanguage(item)}>
+                <TagDisabledText>{item}</TagDisabledText>
+              </TagDisabled>
+            )}
           />
         </CurrentTagContainer>
+
         <SubTitle>Select up to 6 languages</SubTitle>
+
+        {/* Selected Languages */}
         <CurrentTagContainerEnabled>
-          {languagesSpoken.languagesList.map((item, index) => {
-            return (
-              <Tag key={index}>
-                <TagText>{item}</TagText>
-                <TagClose onPress={() => handleRemoveLanguage(item)}>
-                  <FontAwesome name="close" size={12} color="white" />
-                </TagClose>
-              </Tag>
-            );
-          })}
+          {languagesSpoken.languagesList.map((item) => (
+            <Tag key={item}>
+              <TagText>{item}</TagText>
+              <TagClose onPress={() => handleRemoveLanguage(item)}>
+                <FontAwesome name="close" size={12} color="white" />
+              </TagClose>
+            </Tag>
+          ))}
         </CurrentTagContainerEnabled>
+
+        {/* Profile Visibility Toggle */}
         <IsHiddenContainer>
           <Row>
             <Switch
@@ -125,6 +128,8 @@ export const LanguagePage = ({ navigation }) => {
             <IsHiddenText>Visible on profile</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+
+        {/* Navigation */}
         <ContinueButton onPress={onHandleNavigate} bottom={80} />
         <ProgressBar width={"10%"} bottom={0} />
       </Container>

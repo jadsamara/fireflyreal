@@ -2,9 +2,8 @@ import { View, Dimensions, TouchableOpacity, Animated } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import FastImage from "react-native-fast-image";
-import { BottomDrawer } from "./BottomDrawer";
 
-export const Body = ({ setIsModalActive, participant = {} }) => {
+export const Body = ({ participant = {} }) => {
   const { profilePicture = "", allPhotos = [] } = participant;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -79,14 +78,13 @@ export const Body = ({ setIsModalActive, participant = {} }) => {
           />
         ))}
       </IndexBarRow>
+
       <ProfilePictureContainer>
         <ProfilePictureImage
           source={{ uri: profilePicture, priority: FastImage.priority.high }}
           resizeMode={FastImage.resizeMode.cover}
         />
       </ProfilePictureContainer>
-
-      <BottomDrawer setIsModalActive={setIsModalActive} />
     </Container>
   );
 };

@@ -9,11 +9,9 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import { AuthenticationStackContext } from "../../../Context/AuthenticationStackContext";
 
-import { BottomDrawer } from "./BottomDrawer";
-
 import FastImage from "react-native-fast-image";
 
-export const Body = ({ navigation, setIsModalActive }) => {
+export const Body = ({ navigation }) => {
   const { allPhotos, profilePicture } = useContext(AuthenticationStackContext);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -99,7 +97,6 @@ export const Body = ({ navigation, setIsModalActive }) => {
       <ContinueButton onPress={onHandleContinue}>
         <ContinueButtonText>Looks Good!</ContinueButtonText>
       </ContinueButton>
-      <BottomDrawer setIsModalActive={setIsModalActive} />
     </Container>
   );
 };

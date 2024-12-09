@@ -63,7 +63,7 @@ export const Header = ({ navigation }) => {
 const HeaderContainer = styled(View)`
   height: 15%;
   width: 100%;
-  background-color: #6a0708;
+  background-color: #527e65;
   flex-direction: row;
   align-items: center;
 `;

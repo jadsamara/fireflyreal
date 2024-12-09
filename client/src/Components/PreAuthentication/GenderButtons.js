@@ -12,16 +12,16 @@ export const GenderButtons = ({ gender, setGender }) => {
     <>
       <GenderColumn
         onPress={() => {
-          handleGenderSelect("male");
+          handleGenderSelect("Man");
         }}
       >
         <Ionicons
           name="male-outline"
           size={74}
-          color={gender === "male" ? "#79D17C" : "#686868"}
+          color={gender === "Man" ? "#79D17C" : "#686868"}
           style={{
             marginLeft: 10,
-            ...(gender === "male" && {
+            ...(gender === "Man" && {
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
@@ -31,24 +31,24 @@ export const GenderButtons = ({ gender, setGender }) => {
           }}
         />
 
-        {gender === "male" ? (
-          <GenderTextActive>Male</GenderTextActive>
+        {gender === "Man" ? (
+          <GenderTextActive>Man</GenderTextActive>
         ) : (
-          <GenderText>Male</GenderText>
+          <GenderText>Man</GenderText>
         )}
       </GenderColumn>
 
       <GenderColumn
         onPress={() => {
-          handleGenderSelect("female");
+          handleGenderSelect("Women");
         }}
       >
         <Ionicons
           name="female-outline"
           size={74}
-          color={gender === "female" ? "#79D17C" : "#686868"}
+          color={gender === "Women" ? "#79D17C" : "#686868"}
           style={{
-            ...(gender === "female" && {
+            ...(gender === "Women" && {
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
@@ -57,10 +57,10 @@ export const GenderButtons = ({ gender, setGender }) => {
             }),
           }}
         />
-        {gender === "female" ? (
-          <GenderTextActive>Female</GenderTextActive>
+        {gender === "Women" ? (
+          <GenderTextActive>Women</GenderTextActive>
         ) : (
-          <GenderText>Female</GenderText>
+          <GenderText>Women</GenderText>
         )}
       </GenderColumn>
 

@@ -10,7 +10,7 @@ export const BottomSheetComponent = ({
 }) => {
   return (
     <BottomSheet
-      snapPoints={[100, 350, 800]}
+      snapPoints={[80, 350, 600]}
       ref={bottomSheetRef}
       onChange={handleSheetChangesWithAnimation}
       animatedPosition={bottomSheetAnimatedPosition}

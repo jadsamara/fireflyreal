@@ -126,5 +126,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

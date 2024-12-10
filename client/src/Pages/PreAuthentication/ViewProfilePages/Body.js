@@ -11,10 +11,8 @@ import { AuthenticationStackContext } from "../../../Context/AuthenticationStack
 
 import FastImage from "react-native-fast-image";
 
-export const Body = ({ navigation }) => {
+export const Body = ({ navigation, currentIndex, setCurrentIndex }) => {
   const { allPhotos, profilePicture } = useContext(AuthenticationStackContext);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const screenWidth = Dimensions.get("window").width;
   const validPhotos = allPhotos.filter((res) => res.picture);
@@ -94,7 +92,16 @@ export const Body = ({ navigation }) => {
           resizeMode={FastImage.resizeMode.cover}
         />
       </ProfilePictureContainer>
-      <ContinueButton onPress={onHandleContinue}>
+      <ContinueButton
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5, // For Android
+        }}
+        onPress={onHandleContinue}
+      >
         <ContinueButtonText>Looks Good!</ContinueButtonText>
       </ContinueButton>
     </Container>
@@ -155,8 +162,8 @@ const ProfilePictureImage = styled(FastImage)`
 `;
 
 const ContinueButton = styled(TouchableOpacity)`
-  width: 150px;
-  height: 50px;
+  width: 175px;
+  height: 40px;
   background-color: #527e65;
   position: absolute;
   bottom: 130px;
@@ -167,9 +174,9 @@ const ContinueButton = styled(TouchableOpacity)`
 `;
 
 const ContinueButtonText = styled(Text)`
-  font-size: 14px;
   color: white;
-  font-family: poppins-500;
+  font-size: 20px;
+  font-family: poppins-600;
 `;
 
 const AnimatedPhotoImage = styled(Animated.createAnimatedComponent(FastImage))`

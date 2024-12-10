@@ -239,9 +239,9 @@ const VoiceRecordTimer = styled(Text)`
 `;
 
 const VoiceRecordText = styled(Text)`
-  font-size: 10px;
+  font-size: 12px;
   font-family: poppins-500;
-  margin-top: 30px;
+  margin-top: 25px;
   color: #122231;
 `;
 

@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { SafeArea } from "../../../../../Components/GlobalComponents/SafeArea";
 
-import { Ionicons } from "@expo/vector-icons";
+import { BackArrow } from "../../../../../Components/PreAuthentication";
+import { useSelector } from "react-redux";
+import { SaveButton } from "../SaveButton";
 
 export const SchoolPage = ({ navigation }) => {
-  const [userSchool, setUserSchool] = useState({
-    school: "",
-    isHidden: false,
-  });
+  const userData = useSelector((state) => state.user.userData);
+  const initialObj = userData.userInformation[4];
 
-  const onHandleNavigate = () => {
-    navigation.navigate("HighestSchoolDegree");
-  };
+  const [userSchool, setUserSchool] = useState(initialObj);
 
   const onChangeText = (res) => {
     setUserSchool((prevState) => ({
@@ -32,6 +30,8 @@ export const SchoolPage = ({ navigation }) => {
 
   return (
     <SafeArea>
+      <BackArrow navigation={navigation} />
+
       <Container>
         <Title>Where did you go to school?</Title>
         <HeaderContainer>
@@ -52,16 +52,26 @@ export const SchoolPage = ({ navigation }) => {
 
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userSchool.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch value={!userSchool.isHidden} onValueChange={toggleHidden} />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+        <SaveButton
+          backgroundColor={
+            initialObj.school === userSchool.school &&
+            userSchool.isHidden === initialObj.isHidden
+              ? "gray"
+              : "#527e65"
+          }
+          disabled={
+            initialObj.school === userSchool.school &&
+            userSchool.isHidden === initialObj.isHidden
+          }
+          indexToUpdate={4}
+          newInfo={userSchool}
+          navigation={navigation}
+          userData={userData}
+        />
       </Container>
     </SafeArea>
   );
@@ -95,15 +105,16 @@ const InputContainer = styled(View)`
   width: 100%;
   height: 70px;
   align-items: center;
-  margin-top: 45px;
+  margin-top: 40px;
 `;
 
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
+  font-family: poppins-400;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -125,5 +136,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

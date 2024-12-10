@@ -3,38 +3,92 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 import { useSelector } from "react-redux";
-import { FontAwesome } from "@expo/vector-icons";
 
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, storage } from "../../../Config/firebase";
 import { Audio } from "expo-av";
+import {
+  MaterialCommunityIcons,
+  FontAwesome5,
+  FontAwesome,
+} from "@expo/vector-icons";
 
 export const EditVoicePrompt = () => {
   const userData = useSelector((state) => state.user.userData);
   const voiceAudioObj = userData?.voiceAudioObj;
-  const voicePrompt = voiceAudioObj?.voicePrompt;
-  const voiceAudioLink = voiceAudioObj.recordedAudioLink;
+
+  const [sound, setSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayPauseAudio = async () => {
+    try {
+      if (isPlaying) {
+        await sound.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        if (!sound) {
+          setIsPlaying(true);
+          const { sound: newSound } = await Audio.Sound.createAsync({
+            uri: voiceAudioObj.recordedAudioLink,
+          });
+          setSound(newSound);
+
+          await newSound.playAsync();
+
+          newSound.setOnPlaybackStatusUpdate((status) => {
+            if (status.didJustFinish) {
+              setIsPlaying(false);
+              setSound(null);
+            }
+          });
+        } else {
+          await sound.playAsync();
+          setIsPlaying(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  };
 
   return (
     <Container>
       <Title>Voice Prompt</Title>
       <BoxContainer>
-        <DeleteButton
+        <PromptText>"{voiceAudioObj.voicePrompt}"</PromptText>
+        <GreenBox
           style={{
             shadowColor: "#000",
-            shadowOffset: { width: 5, height: 5 },
+            shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
-            elevation: 5,
+            elevation: 5, // For Android
           }}
         >
-          <DeleteText>x</DeleteText>
-        </DeleteButton>
-        <PromptText>"{voicePrompt}"</PromptText>
-        <GreenBox>
-          <PlayPauseButton>
-            <FontAwesome name="play" size={24} color="white" />
+          <PlayPauseButton onPress={handlePlayPauseAudio}>
+            {!isPlaying ? (
+              <FontAwesome5
+                name="play"
+                size={24}
+                color="white"
+                style={{ marginLeft: 5 }}
+              />
+            ) : (
+              <FontAwesome name="pause" size={24} color="white" />
+            )}
           </PlayPauseButton>
+          <View
+            style={{
+              marginLeft: 10,
+              flexDirection: "row",
+            }}
+          >
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+          </View>
         </GreenBox>
       </BoxContainer>
     </Container>

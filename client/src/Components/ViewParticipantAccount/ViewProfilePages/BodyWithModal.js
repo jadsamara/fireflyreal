@@ -5,14 +5,17 @@ import {
   Animated,
   Text,
 } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import FastImage from "react-native-fast-image";
 
-export const BodyWithModal = ({ participant = {} }) => {
+export const BodyWithModal = ({
+  participant = {},
+  currentIndex,
+  setCurrentIndex,
+}) => {
   const { profilePicture = "", allPhotos = [] } = participant;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current; // Initial opacity is 1
 
   const screenWidth = Dimensions.get("window").width;
@@ -160,19 +163,20 @@ const ProfilePictureImage = styled(FastImage)`
 
 const MessageBubble = styled(View)`
   background-color: #79d17c;
-  height: 30px;
   position: absolute;
   bottom: 400px;
   left: 100px;
   align-items: center;
   justify-content: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 30px;
 `;
 
 const MessageBubbleText = styled(Text)`
-  font-size: 10px;
-  font-family: poppins-400;
+  font-size: 14px;
+  font-family: poppins-600;
   color: white;
 `;

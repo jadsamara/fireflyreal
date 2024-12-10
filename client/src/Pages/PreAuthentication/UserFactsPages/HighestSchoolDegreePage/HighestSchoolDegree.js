@@ -79,10 +79,11 @@ export const HighestSchoolDegree = ({ navigation }) => {
         <IsHiddenContainer>
           <Row>
             <Switch
-              value={!userHighestSchoolDegree.isHidden}
+              disabled={true}
+              value={false}
               onValueChange={toggleHidden}
             />
-            <IsHiddenText>Visible on profile?</IsHiddenText>
+            <IsHiddenText>Always hidden</IsHiddenText>
           </Row>
         </IsHiddenContainer>
         <ContinueButton onPress={onHandleNavigate} bottom={80} />

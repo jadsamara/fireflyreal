@@ -60,10 +60,9 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
                 disabledDrag: false,
                 disabledReSorted: false,
               }
-            : p
+            : { ...p }
         );
-
-        setAllPhotos(updatedPhotos);
+        setAllPhotos([...updatedPhotos]);
       }
     } catch (error) {
       console.error("Error during upload to Firebase:", error);

@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, Switch } from "react-native";
 import styled from "styled-components/native";
 import { SafeArea } from "../../../../../Components/GlobalComponents/SafeArea";
 
-import { Ionicons } from "@expo/vector-icons";
+import { BackArrow } from "../../../../../Components/PreAuthentication";
+import { useSelector } from "react-redux";
+import { SaveButton } from "../SaveButton";
 
 export const JobTitle = ({ navigation }) => {
-  const [userJobTitle, setUserJobTitle] = useState({
-    title: "",
-    isHidden: false,
-  });
+  const userData = useSelector((state) => state.user.userData);
+  const initialObj = userData.userInformation[7];
 
-  const onHandleNavigate = () => {
-    navigation.navigate("CreateAccountPageSix");
-  };
+  const [userJobTitle, setUserJobTitle] = useState(initialObj);
 
   const onChangeText = (res) => {
     setUserJobTitle((prevState) => ({
@@ -31,10 +29,12 @@ export const JobTitle = ({ navigation }) => {
 
   return (
     <SafeArea>
+      <BackArrow navigation={navigation} />
+
       <Container>
         <Title>What's your job title?</Title>
         <HeaderContainer>
-          <HeaderText>Please enter your position in the company.</HeaderText>
+          <HeaderText>Please enter your position in the title.</HeaderText>
         </HeaderContainer>
         <InputContainer>
           <TextInputComponent
@@ -49,16 +49,29 @@ export const JobTitle = ({ navigation }) => {
 
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userJobTitle.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch
+              value={!userJobTitle.isHidden}
+              onValueChange={toggleHidden}
+            />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+        <SaveButton
+          backgroundColor={
+            initialObj.title === userJobTitle.title &&
+            userJobTitle.isHidden === initialObj.isHidden
+              ? "gray"
+              : "#527e65"
+          }
+          disabled={
+            initialObj.title === userJobTitle.title &&
+            userJobTitle.isHidden === initialObj.isHidden
+          }
+          indexToUpdate={7}
+          newInfo={userJobTitle}
+          navigation={navigation}
+          userData={userData}
+        />
       </Container>
     </SafeArea>
   );
@@ -98,9 +111,10 @@ const InputContainer = styled(View)`
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
+  font-family: poppins-500;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -122,5 +136,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

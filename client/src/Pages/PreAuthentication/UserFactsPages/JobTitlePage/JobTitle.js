@@ -11,7 +11,6 @@ import {
 } from "../../../../Components/PreAuthentication";
 
 import { SafeArea } from "../../../../Components/GlobalComponents/SafeArea";
-import { Ionicons } from "@expo/vector-icons";
 
 export const JobTitle = ({ navigation }) => {
   const { userJobTitle, setUserJobTitle } = useContext(

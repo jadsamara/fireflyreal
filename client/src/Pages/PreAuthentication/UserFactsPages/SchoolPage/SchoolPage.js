@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { AuthenticationStackContext } from "../../../../Context/AuthenticationStackContext";
@@ -59,13 +59,7 @@ export const SchoolPage = ({ navigation }) => {
 
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userSchool.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch value={!userSchool.isHidden} onValueChange={toggleHidden} />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
@@ -136,5 +130,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

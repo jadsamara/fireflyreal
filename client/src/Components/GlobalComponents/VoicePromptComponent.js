@@ -49,7 +49,15 @@ export const VoicePromptComponent = ({ voiceAudioObj }) => {
       <VoiceTitle>Listen to voice prompt</VoiceTitle>
       <BoxContainer>
         <PromptText>"{voiceAudioObj.voicePrompt}"</PromptText>
-        <GreenBox>
+        <GreenBox
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5, // For Android
+          }}
+        >
           <PlayPauseButton onPress={handlePlayPauseAudio}>
             {!isPlaying ? (
               <FontAwesome5
@@ -68,13 +76,13 @@ export const VoicePromptComponent = ({ voiceAudioObj }) => {
               flexDirection: "row",
             }}
           >
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
-            <MaterialCommunityIcons name="waveform" size={30} color="black" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
+            <MaterialCommunityIcons name="waveform" size={32} color="#527e65" />
           </View>
         </GreenBox>
       </BoxContainer>
@@ -84,28 +92,25 @@ export const VoicePromptComponent = ({ voiceAudioObj }) => {
 
 const BoxContainer = styled(View)`
   width: 100%;
-  border-width: 0.4px;
   border-color: gray;
   align-self: center;
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 10px;
   margin-bottom: 10px;
   margin-top: 10px;
 `;
 
 const PromptText = styled(Text)`
-  font-size: 10px;
-  color: green;
+  font-size: 12px;
+  color: #527e65;
   font-family: poppins-500;
 `;
 
 const GreenBox = styled(View)`
-  width: 100%;
+  width: 90%;
   height: 70px;
-  align-self: center;
   background-color: #00ffba;
-  margin-top: 10px;
-  border-radius: 10px;
+  margin-top: 15px;
+  border-radius: 16px;
   flex-direction: row;
   align-items: center;
   padding-left: 10px;
@@ -113,8 +118,8 @@ const GreenBox = styled(View)`
 `;
 
 const PlayPauseButton = styled(TouchableOpacity)`
-  height: 50px;
-  width: 50px;
+  height: 44px;
+  width: 44px;
   border-radius: 1000px;
   background-color: #79d17c;
   justify-content: center;
@@ -127,11 +132,11 @@ const VoiceContainer = styled(View)`
   padding: 10px;
   border-color: gray;
   align-self: center;
-  margin-top: 40px;
+  margin-top: 10px;
 `;
 
 const VoiceTitle = styled(Text)`
-  font-size: 13px;
+  font-size: 16px;
   color: black;
-  font-family: poppins-500;
+  font-family: poppins-600;
 `;

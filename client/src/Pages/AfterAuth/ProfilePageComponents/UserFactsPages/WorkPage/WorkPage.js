@@ -1,16 +1,18 @@
-import React, { useContext, useState } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, Text, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { SafeArea } from "../../../../../Components/GlobalComponents/SafeArea";
 
-import { Ionicons } from "@expo/vector-icons";
+import { BackArrow } from "../../../../../Components/PreAuthentication";
+import { useSelector } from "react-redux";
+import { SaveButton } from "../SaveButton";
 
 export const WorkPage = ({ navigation }) => {
-  const [userWork, setUserWork] = useState({
-    company: "",
-    isHidden: false,
-  });
+  const userData = useSelector((state) => state.user.userData);
+  const initialObj = userData.userInformation[6];
+
+  const [userWork, setUserWork] = useState(initialObj);
 
   const onChangeText = (res) => {
     setUserWork((prevState) => ({
@@ -28,6 +30,8 @@ export const WorkPage = ({ navigation }) => {
 
   return (
     <SafeArea>
+      <BackArrow navigation={navigation} />
+
       <Container>
         <Title>Where do you work?</Title>
         <HeaderContainer>
@@ -46,16 +50,26 @@ export const WorkPage = ({ navigation }) => {
 
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userWork.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch value={!userWork.isHidden} onValueChange={toggleHidden} />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+        <SaveButton
+          backgroundColor={
+            initialObj.company === userWork.company &&
+            userWork.isHidden === initialObj.isHidden
+              ? "gray"
+              : "#527e65"
+          }
+          disabled={
+            initialObj.company === userWork.company &&
+            userWork.isHidden === initialObj.isHidden
+          }
+          indexToUpdate={6}
+          newInfo={userWork}
+          navigation={navigation}
+          userData={userData}
+        />
       </Container>
     </SafeArea>
   );
@@ -95,9 +109,10 @@ const InputContainer = styled(View)`
 const TextInputComponent = styled(TextInput)`
   width: 90%;
   height: 50px;
-  background-color: #cac8c8;
+  background-color: #ebebeb;
   border-radius: 16px;
   padding-left: 20px;
+  font-family: poppins-500;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -119,5 +134,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

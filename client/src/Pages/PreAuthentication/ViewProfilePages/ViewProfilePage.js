@@ -11,6 +11,8 @@ import { BottomSheetComponent } from "./BottomSheetComponent";
 
 export const ViewProfilePage = ({ navigation }) => {
   const [isModalActive, setIsModalActive] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const bottomSheetRef = useRef(null);
   const bottomSheetAnimatedPosition = useRef(null);
 
@@ -25,19 +27,19 @@ export const ViewProfilePage = ({ navigation }) => {
   return (
     <GestureHandlerRootView>
       <Container>
+        <Header navigation={navigation} />
         {!isModalActive ? (
           <>
-            <Header navigation={navigation} />
             <Body
               navigation={navigation}
-              setIsModalActive={setIsModalActive}
-              isModalActive={isModalActive}
+              currentIndex={currentIndex}
+              setCurrentIndex={setCurrentIndex}
             />
           </>
         ) : (
           <BodyWithModal
-            setIsModalActive={setIsModalActive}
-            isModalActive={isModalActive}
+            currentIndex={currentIndex}
+            setCurrentIndex={setCurrentIndex}
           />
         )}
         <BottomSheetComponent

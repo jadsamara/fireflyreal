@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useSelector } from "react-redux";
+import { VoicePromptComponent } from "../../Components/GlobalComponents/VoicePromptComponent";
 
 export const ProfilePage = ({ navigation }) => {
   const userData = useSelector((state) => state.user.userData);
@@ -75,7 +76,7 @@ const HeaderRow = styled(View)`
 
 const HeaderText = styled(Text)`
   font-size: 30px;
-  font-family: poppins-600;
+  font-family: poppins-800;
 `;
 
 const SettingsButton = styled(TouchableOpacity)`

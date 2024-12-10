@@ -1,12 +1,10 @@
 import { View, Dimensions, TouchableOpacity, Animated } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components/native";
 import FastImage from "react-native-fast-image";
 
-export const Body = ({ participant = {} }) => {
+export const Body = ({ participant = {}, currentIndex, setCurrentIndex }) => {
   const { profilePicture = "", allPhotos = [] } = participant;
-
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const screenWidth = Dimensions.get("window").width;
   const validPhotos = allPhotos.filter((res) => res.picture);

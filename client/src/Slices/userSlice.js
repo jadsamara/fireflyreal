@@ -146,6 +146,17 @@ const userSlice = createSlice({
     setIsAllowed(state, action) {
       state.isAllowed = false; // Explicitly set isAllowed
     },
+
+    updateUserInformation(state, action) {
+      const { index, newInfo } = action.payload;
+      if (state.userData.userInformation[index]) {
+        // Update the specific object by merging newInfo into it at the given index
+        state.userData.userInformation[index] = {
+          ...state.userData.userInformation[index],
+          ...newInfo,
+        };
+      }
+    },
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -168,6 +179,7 @@ export const {
   disableAccountFunction,
   enableAccountFunction,
   setNewBio,
+  updateUserInformation,
 } = userSlice.actions;
 
 export default userSlice.reducer;

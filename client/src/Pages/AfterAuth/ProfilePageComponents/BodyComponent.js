@@ -21,7 +21,7 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
   const { setAllPhotos, allPhotos } = useContext(ProfilePageContext);
 
   const [selectedPhoto, setSelectedPhoto] = useState(1);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -53,15 +53,19 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
   }, [userNumber]);
 
   useEffect(() => {
+    const maxPhotos = 6;
+    const index = allPhotos.findIndex((photo) => !photo.picture);
+    const endIndex = index !== -1 ? index + 1 : maxPhotos; // Use index+1 if a photo without a picture is found, otherwise use maxPhotos
     const filteredDataTemp = allPhotos.slice(
       0,
-      Math.min(
-        6,
-        allPhotos.findIndex((photo) => !photo.picture) + 1 || 6 // Ensure we stop at 6
-      )
+      Math.min(allPhotos.length, endIndex)
     );
 
-    setFilteredData(filteredDataTemp);
+    if (filteredDataTemp.length > 0) {
+      setFilteredData(filteredDataTemp[filteredDataTemp.length - 1].id);
+    } else {
+      setFilteredData(null); // or some other default value indicating no valid selection
+    }
   }, [allPhotos]);
 
   const selectedPhotoObject = allPhotos.find(
@@ -92,21 +96,30 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
   };
 
   const onHandleDeletePhoto = (id) => {
-    // Update the photo list by removing the picture
+    // Update the photo list by removing the picture for the matching ID
     const updatedPhotos = allPhotos.map((photo) => {
+      // Ensure we return a new object for the updated photo
       if (photo.id === id) {
-        return { ...photo, picture: "", prompt: "" }; // Removing the picture
+        return { ...photo, picture: "", prompt: "" }; // Remove the picture and prompt
       }
-      return photo;
+      return { ...photo }; // Return a shallow copy of other photos
     });
 
-    // Optionally, sort or move the deleted item to the end
-    const photoWithoutPic = updatedPhotos.find((photo) => photo.id === id);
-    const photosWithPic = updatedPhotos.filter((photo) => photo.id !== id);
-    const finalPhotos = [...photosWithPic, photoWithoutPic]; // Moves the item to the end
+    // Sort the list: photos with pictures first, then empty ones, maintaining ID order
+    const sortedPhotos = updatedPhotos.sort((a, b) => {
+      if (a.picture && b.picture) return a.id - b.id;
 
-    setAllPhotos(finalPhotos);
-    uploadNewDraggedAndSaveLocally(finalPhotos);
+      // If only one has a picture, prioritize the one with a picture
+      if (a.picture && !b.picture) return -1;
+      if (!a.picture && b.picture) return 1;
+
+      // If neither has a picture, maintain order by ID
+      return a.id - b.id;
+    });
+
+    // Update the state with the new sorted list
+    setAllPhotos(sortedPhotos);
+    uploadNewDraggedAndSaveLocally(sortedPhotos);
   };
 
   const render_item = (item) => {
@@ -124,29 +137,16 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
           setSelectedPhoto={setSelectedPhoto}
           navigation={navigation}
           onHandleDeletePhoto={onHandleDeletePhoto}
+          filteredData={filteredData}
         />
       </View>
     );
   };
 
   const onReleaseDrag = (newData) => {
-    let updatedData = [...newData]; // Make a copy to ensure immutability
-
-    while (updatedData.length < 6) {
-      const missingItem = allPhotos.find(
-        (item) => !updatedData.some((data) => data.id === item.id)
-      );
-
-      if (missingItem) {
-        updatedData.push({ ...missingItem }); // Ensure missingItem retains its unique properties
-      } else {
-        break; // Avoid infinite loop
-      }
-    }
-
-    setAllPhotos(updatedData);
+    setAllPhotos(newData);
     setEnableScroll(true);
-    uploadNewDraggedAndSaveLocally(updatedData);
+    uploadNewDraggedAndSaveLocally(newData);
   };
 
   const uploadNewDraggedAndSaveLocally = async (newData) => {
@@ -173,9 +173,9 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
       >
         {allPhotos.length > 0 ? (
           <DraggableGrid
-            key={filteredData.length}
+            key={allPhotos.length}
             numColumns={GRID_COLUMNS}
-            data={filteredData}
+            data={allPhotos}
             style={{
               backgroundColor: "#fff",
             }}

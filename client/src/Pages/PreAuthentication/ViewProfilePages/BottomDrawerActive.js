@@ -56,7 +56,7 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
   const IconRow = ({ icon, text }) => (
     <Row>
       {icon}
-      <Paragraph>{text}</Paragraph>
+      <ParagraphRow>{text}</ParagraphRow>
     </Row>
   );
 
@@ -93,7 +93,7 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
             <MaterialCommunityIcons
               name="chat-processing"
               size={24}
-              color="#686868"
+              color="#527e65"
             />
           }
           text={`"${bio}"`}
@@ -101,14 +101,14 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
       )}
       {!userInformation[5].isHidden && homeTown && (
         <IconRow
-          icon={<FontAwesome6 name="house-chimney" size={20} color="#686868" />}
+          icon={<FontAwesome6 name="house-chimney" size={20} color="#527e65" />}
           text={homeTown}
         />
       )}
       {!userInformation[4].isHidden && userInformation[4].school && (
         <IconRow
           icon={
-            <MaterialCommunityIcons name="school" size={24} color="#686868" />
+            <MaterialCommunityIcons name="school" size={24} color="#527e65" />
           }
           text={userInformation[4].school}
         />
@@ -117,14 +117,14 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
         userInformation[7].title &&
         userInformation[6].company && (
           <IconRow
-            icon={<FontAwesome6 name="briefcase" size={20} color="#686868" />}
+            icon={<FontAwesome6 name="briefcase" size={20} color="#527e65" />}
             text={`${userInformation[7].title}, ${userInformation[6].company}`}
           />
         )}
       {!userInformation[3].isHidden && userInformation[3].opinion && (
         <IconRow
           icon={
-            <MaterialCommunityIcons name="pillar" size={22} color="#686868" />
+            <MaterialCommunityIcons name="pillar" size={22} color="#527e65" />
           }
           text={userInformation[3].opinion}
         />
@@ -132,7 +132,7 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
       {!userInformation[0].isHidden &&
         userInformation[0].languagesList.length > 0 && (
           <IconRow
-            icon={<FontAwesome6 name="language" size={20} color="#686868" />}
+            icon={<FontAwesome6 name="language" size={20} color="#527e65" />}
             text={renderList(userInformation[0].languagesList)}
           />
         )}
@@ -144,8 +144,8 @@ export const BottomDrawerActive = ({ setIsModalActive }) => {
 };
 
 const Container = styled(View)`
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-bottom: 20px;
 `;
 
@@ -154,20 +154,20 @@ const ScrollContainer = styled(ScrollView)`
   padding: 10px;
   border-color: rgba(112, 112, 112, 0.3);
   border-bottom-width: 0.5px;
-  margin-top: 10px;
+  padding-left: 16px;
 `;
 
 const HorizontalTab = styled(View)`
-  border-color: rgba(112, 112, 112, 0.3);
-  border-right-width: 0.5px;
+  border-color: rgba(112, 112, 112, 0.5);
+  border-right-width: 1px;
   padding-right: 15px;
   flex-direction: row;
   align-items: center;
 `;
 
 const HorizontalTabMiddle = styled(View)`
-  border-color: rgba(112, 112, 112, 0.3);
-  border-right-width: 0.5px;
+  border-color: rgba(112, 112, 112, 0.5);
+  border-right-width: 1px;
   padding-right: 15px;
   padding-left: 15px;
   flex-direction: row;
@@ -175,18 +175,25 @@ const HorizontalTabMiddle = styled(View)`
 `;
 
 const Paragraph = styled(Text)`
-  font-size: 11px;
+  font-size: 12px;
   font-family: poppins-500;
   margin-left: 10px;
+`;
+
+const ParagraphRow = styled(Text)`
+  font-size: 12px;
+  font-family: poppins-500;
+  position: absolute;
+  left: 50px;
 `;
 
 const Row = styled(View)`
   flex-direction: row;
   width: 100%;
-  margin-top: 10px;
   align-items: center;
   justify-content: flex-start;
   border-color: rgba(112, 112, 112, 0.3);
   border-bottom-width: 0.5px;
-  padding: 10px;
+  padding: 15px;
+  height: 55px;
 `;

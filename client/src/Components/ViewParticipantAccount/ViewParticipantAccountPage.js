@@ -16,6 +16,8 @@ export const ViewParticipantAccountPage = ({ navigation, route }) => {
   const { participant } = route.params;
 
   const [isModalActive, setIsModalActive] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const bottomSheetRef = useRef(null);
   const bottomSheetAnimatedPosition = useRef(null);
 
@@ -39,17 +41,16 @@ export const ViewParticipantAccountPage = ({ navigation, route }) => {
             <>
               <Header navigation={navigation} participant={participant} />
               <Body
-                navigation={navigation}
-                setIsModalActive={setIsModalActive}
-                isModalActive={isModalActive}
                 participant={participant}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
               />
             </>
           ) : (
             <BodyWithModal
-              setIsModalActive={setIsModalActive}
-              isModalActive={isModalActive}
               participant={participant}
+              currentIndex={currentIndex}
+              setCurrentIndex={setCurrentIndex}
             />
           )}
 

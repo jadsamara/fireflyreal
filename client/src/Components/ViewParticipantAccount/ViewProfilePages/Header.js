@@ -49,8 +49,7 @@ export const Header = ({ navigation, participant = {} }) => {
       </ProfilePictureContainer>
       <HeaderCol>
         <RowOne>
-          <NameText>{name},</NameText>
-          <AgeText>{newAge}</AgeText>
+          <NameText>{name}</NameText>
           <GenderLetter>{genderLetter}</GenderLetter>
         </RowOne>
         <RowTwo>
@@ -68,7 +67,7 @@ export const Header = ({ navigation, participant = {} }) => {
 };
 
 const HeaderContainer = styled(View)`
-  height: 15%;
+  height: 16%;
   width: 100%;
   background-color: #527e65;
   flex-direction: row;
@@ -76,10 +75,10 @@ const HeaderContainer = styled(View)`
 `;
 
 const ProfilePictureContainer = styled(View)`
-  height: 50px;
-  width: 50px;
+  height: 65px;
+  width: 65px;
   margin-left: 30px;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 
 const ProfilePictureImage = styled(FastImage)`
@@ -89,8 +88,8 @@ const ProfilePictureImage = styled(FastImage)`
 `;
 
 const HeaderCol = styled(View)`
-  margin-left: 30px;
-  margin-top: 20px;
+  margin-left: 20px;
+  margin-top: 35px;
 `;
 
 const RowOne = styled(View)`
@@ -99,16 +98,9 @@ const RowOne = styled(View)`
 `;
 
 const NameText = styled(Text)`
-  font-size: 20px;
+  font-size: 24px;
   color: white;
   font-family: poppins-600;
-`;
-
-const AgeText = styled(Text)`
-  font-size: 20px;
-  color: white;
-  font-family: poppins-600;
-  margin-left: 10px;
 `;
 
 const GenderLetter = styled(Text)`
@@ -121,14 +113,15 @@ const GenderLetter = styled(Text)`
 
 const RowTwo = styled(View)`
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
+  margin-top: 5px;
 `;
 
 const RatingsText = styled(Text)`
-  font-size: 12px;
+  font-size: 14px;
   color: white;
   font-family: poppins-500;
-  margin-left: 10px;
+  margin-left: 5px;
 `;
 
 const AmountOfSparksText = styled(Text)`

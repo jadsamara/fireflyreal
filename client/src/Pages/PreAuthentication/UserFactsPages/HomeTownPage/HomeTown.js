@@ -36,7 +36,7 @@ export const HomeTown = ({ navigation }) => {
               onChangeText={setHomeTown}
               value={homeTown}
               maxLength={60}
-              placeholder="City, Country"
+              placeholder="City"
               placeholderTextColor="gray"
               returnKeyType={"default"}
             />

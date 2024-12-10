@@ -55,22 +55,24 @@ export const HeaderComponent = ({ navigation }) => {
           </NameText>
           <HomeTownText>{userData.homeTown}</HomeTownText>
           <BottomLabelContainer>
-            <AntDesign name="star" size={16} color="#93E4B6" />
+            <AntDesign name="star" size={18} color="#93E4B6" />
             <RatingLabel>
-              {parseFloat(userData.averageUserRating).toFixed(1)}
+              {parseFloat(userData.averageUserRating).toFixed(0)}
             </RatingLabel>
+          </BottomLabelContainer>
+          <BottomLabelContainer>
             <TotalSparksText>
               {userData.pastSparks.length} Sparks
             </TotalSparksText>
           </BottomLabelContainer>
-          <LuminsLabel>
+          {/* <LuminsLabel>
             <LuminLogo
               source={LuminsLogo}
               resizeMode={"contain"}
               style={{ tintColor: "#fff" }}
             />
             <LuminsLabelText>Lumins</LuminsLabelText>
-          </LuminsLabel>
+          </LuminsLabel> */}
         </ColOne>
       </RowOne>
       <ViewProfileButton
@@ -98,7 +100,7 @@ const Container = styled(View)`
 const RowOne = styled(View)`
   width: 100%;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
 `;
 
 const ProfilePictureContainer = styled(View)`
@@ -123,40 +125,41 @@ const VerifiedImage = styled(Image)`
 
 const ColOne = styled(View)`
   align-items: flex-start;
+  margin-top: 5px;
+  margin-left: 50px;
 `;
 
 const NameText = styled(Text)`
   color: black;
-  font-family: "poppins-900";
-  font-size: 16px;
+  font-family: "poppins-600";
+  font-size: 20px;
 `;
 
 const HomeTownText = styled(Text)`
   color: black;
   font-family: "poppins-400";
-  font-size: 9px;
+  font-size: 14px;
+  margin-top: 3px;
 `;
 
 const BottomLabelContainer = styled(View)`
   flex-direction: row;
-  align-items: center;
-  align-self: center;
+  align-items: flex-start;
+  align-self: flex-start;
   justify-content: center;
   margin-top: 3px;
 `;
 
 const RatingLabel = styled(Text)`
-  margin-left: 2px;
+  margin-left: 5px;
   font-family: poppins-400;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const TotalSparksText = styled(Text)`
-  font-size: 10px;
+  font-size: 14px;
   font-family: poppins-600;
-  margin-left: 7px;
   color: #79d17c;
-  margin-top: 3px;
 `;
 
 const LuminsLabel = styled(TouchableOpacity)`
@@ -202,8 +205,8 @@ const ViewProfileButtonText = styled(Text)`
 `;
 
 const Subtitle = styled(Text)`
-  font-size: 8px;
-  font-family: poppins-200;
+  font-size: 12px;
+  font-family: poppins-300;
   color: black;
   text-align: center;
   margin-top: 30px;

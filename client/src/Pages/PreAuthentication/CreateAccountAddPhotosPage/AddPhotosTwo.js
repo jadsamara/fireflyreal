@@ -16,23 +16,22 @@ const GRID_COLUMNS = 3; // Number of columns in the grid
 export const AddPhotosTwo = ({ navigation }) => {
   const { allPhotos, setAllPhotos } = useContext(AuthenticationStackContext);
   const [selectedPhoto, setSelectedPhoto] = useState(1);
-  const [filteredData, setFilteredData] = useState(allPhotos);
+  const [filteredData, setFilteredData] = useState(0);
 
   useEffect(() => {
-    // Reorganize `allPhotos` so items with photos come first
-    const filteredDataTemp = [...allPhotos].sort((a, b) => {
-      // If both have pictures, maintain order
-      if (a.picture && b.picture) return a.id - b.id;
+    const maxPhotos = 6;
+    const index = allPhotos.findIndex((photo) => !photo.picture);
+    const endIndex = index !== -1 ? index + 1 : maxPhotos; // Use index+1 if a photo without a picture is found, otherwise use maxPhotos
+    const filteredDataTemp = allPhotos.slice(
+      0,
+      Math.min(allPhotos.length, endIndex)
+    );
 
-      // If only one has a picture, prioritize the one with a picture
-      if (a.picture && !b.picture) return -1;
-      if (!a.picture && b.picture) return 1;
-
-      // If neither has a picture, maintain order
-      return a.id - b.id;
-    });
-
-    setFilteredData(filteredDataTemp);
+    if (filteredDataTemp.length > 0) {
+      setFilteredData(filteredDataTemp[filteredDataTemp.length - 1].id);
+    } else {
+      setFilteredData(null); // or some other default value indicating no valid selection
+    }
   }, [allPhotos]);
 
   const selectedPhotoObject = allPhotos.find(
@@ -107,20 +106,13 @@ export const AddPhotosTwo = ({ navigation }) => {
           setSelectedPhoto={setSelectedPhoto}
           navigation={navigation}
           onHandleDeletePhoto={onHandleDeletePhoto}
+          filteredData={filteredData}
         />
       </View>
     );
   };
 
   const onReleaseDrag = (newData) => {
-    while (newData.length < 6) {
-      const missingItem = allPhotos.find(
-        (item) => !newData.some((data) => data.id === item.id)
-      );
-      if (missingItem) {
-        newData.push(missingItem);
-      }
-    }
     setAllPhotos(newData);
   };
 
@@ -142,9 +134,9 @@ export const AddPhotosTwo = ({ navigation }) => {
         >
           {allPhotos.length > 0 ? (
             <DraggableGrid
-              key={filteredData.length}
+              key={allPhotos.length}
               numColumns={GRID_COLUMNS}
-              data={filteredData}
+              data={allPhotos}
               style={{
                 backgroundColor: "#fff",
                 marginTop: 50,

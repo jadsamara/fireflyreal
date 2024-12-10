@@ -1,25 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { SafeArea } from "../../../../../Components/GlobalComponents/SafeArea";
-import { Ionicons } from "@expo/vector-icons";
+import { BackArrow } from "../../../../../Components/PreAuthentication";
+import { useSelector } from "react-redux";
+import { SaveButton } from "../SaveButton";
 
 export const HighestSchoolDegree = ({ navigation }) => {
-  const [userHighestSchoolDegree, setUserHighestSchoolDegree] = useState({
-    schoolGrad: "",
-    isHidden: false,
-  });
+  const userData = useSelector((state) => state.user.userData);
+  const initialObj = userData.userInformation[5];
+
+  const [userHighestSchoolDegree, setUserHighestSchoolDegree] =
+    useState(initialObj);
 
   const changeHighestLevelAttained = (res) => {
     setUserHighestSchoolDegree((prevState) => ({
       ...prevState,
       schoolGrad: res,
     }));
-  };
-
-  const onHandleNavigate = () => {
-    navigation.navigate("WorkPage");
   };
 
   const toggleHidden = () => {
@@ -39,6 +38,8 @@ export const HighestSchoolDegree = ({ navigation }) => {
 
   return (
     <SafeArea>
+      <BackArrow navigation={navigation} />
+
       <Container>
         <Title>What's the highest level you attained</Title>
 
@@ -50,27 +51,49 @@ export const HighestSchoolDegree = ({ navigation }) => {
                 backgroundColor={
                   userHighestSchoolDegree.schoolGrad === res
                     ? "#527e65"
-                    : "gray"
+                    : "#e2e2e2"
                 }
                 onPress={() => changeHighestLevelAttained(res)}
               >
-                <TagText>{res}</TagText>
+                <TagText
+                  color={
+                    userHighestSchoolDegree.schoolGrad === res
+                      ? "white"
+                      : "black"
+                  }
+                >
+                  {res}
+                </TagText>
               </Tag>
             );
           })}
         </CurrentTagContainer>
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userHighestSchoolDegree.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
-            <IsHiddenText>Visible on profile?</IsHiddenText>
+            <Switch
+              disabled={true}
+              value={false}
+              onValueChange={toggleHidden}
+            />
+            <IsHiddenText>Always hidden</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+        <SaveButton
+          backgroundColor={
+            initialObj.schoolGrad === userHighestSchoolDegree.schoolGrad &&
+            userHighestSchoolDegree.isHidden === initialObj.isHidden
+              ? "gray"
+              : "#527e65"
+          }
+          disabled={
+            initialObj.schoolGrad === userHighestSchoolDegree.schoolGrad &&
+            userHighestSchoolDegree.isHidden === initialObj.isHidden
+          }
+          indexToUpdate={5}
+          newInfo={userHighestSchoolDegree}
+          navigation={navigation}
+          userData={userData}
+        />
       </Container>
     </SafeArea>
   );
@@ -111,9 +134,9 @@ const Tag = styled(TouchableOpacity)`
 `;
 
 const TagText = styled(Text)`
-  color: white;
-  font-family: poppins-600;
-  font-size: 11px;
+  color: ${({ color }) => color};
+  font-family: poppins-500;
+  font-size: 12px;
 `;
 
 const IsHiddenContainer = styled(View)`
@@ -135,5 +158,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

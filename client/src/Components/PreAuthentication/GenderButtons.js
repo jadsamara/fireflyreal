@@ -40,15 +40,15 @@ export const GenderButtons = ({ gender, setGender }) => {
 
       <GenderColumn
         onPress={() => {
-          handleGenderSelect("Women");
+          handleGenderSelect("Woman");
         }}
       >
         <Ionicons
           name="female-outline"
           size={74}
-          color={gender === "Women" ? "#79D17C" : "#686868"}
+          color={gender === "Woman" ? "#79D17C" : "#686868"}
           style={{
-            ...(gender === "Women" && {
+            ...(gender === "Woman" && {
               shadowColor: "#000",
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.15,
@@ -57,10 +57,10 @@ export const GenderButtons = ({ gender, setGender }) => {
             }),
           }}
         />
-        {gender === "Women" ? (
-          <GenderTextActive>Women</GenderTextActive>
+        {gender === "Woman" ? (
+          <GenderTextActive>Woman</GenderTextActive>
         ) : (
-          <GenderText>Women</GenderText>
+          <GenderText>Woman</GenderText>
         )}
       </GenderColumn>
 

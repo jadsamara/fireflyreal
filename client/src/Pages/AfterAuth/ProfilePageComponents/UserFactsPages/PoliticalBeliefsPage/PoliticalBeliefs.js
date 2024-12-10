@@ -1,26 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Switch } from "react-native";
 import styled from "styled-components/native";
 
 import { SafeArea } from "../../../../../Components/GlobalComponents/SafeArea";
 
-import { Ionicons } from "@expo/vector-icons";
+import { BackArrow } from "../../../../../Components/PreAuthentication";
+import { useSelector } from "react-redux";
+import { SaveButton } from "../SaveButton";
 
 export const PoliticalBeliefs = ({ navigation }) => {
-  const [userPoliticalOpinion, setUserPoliticalOpinion] = useState({
-    opinion: "",
-    isHidden: false,
-  });
+  const userData = useSelector((state) => state.user.userData);
+  const initialObj = userData.userInformation[3];
+  const [userPoliticalOpinion, setUserPoliticalOpinion] = useState(initialObj);
 
   const changeOpinion = (res) => {
     setUserPoliticalOpinion((prevState) => ({
       ...prevState,
       opinion: res,
     }));
-  };
-
-  const onHandleNavigate = () => {
-    navigation.navigate("SchoolPage");
   };
 
   const toggleHidden = () => {
@@ -40,6 +37,8 @@ export const PoliticalBeliefs = ({ navigation }) => {
 
   return (
     <SafeArea>
+      <BackArrow navigation={navigation} />
+
       <Container>
         <Title>What are your political beliefs?</Title>
 
@@ -49,27 +48,46 @@ export const PoliticalBeliefs = ({ navigation }) => {
               <Tag
                 key={res}
                 backgroundColor={
-                  userPoliticalOpinion.opinion === res ? "#527e65" : "gray"
+                  userPoliticalOpinion.opinion === res ? "#527e65" : "#e2e2e2"
                 }
                 onPress={() => changeOpinion(res)}
               >
-                <TagText>{res}</TagText>
+                <TagText
+                  color={
+                    userPoliticalOpinion.opinion === res ? "white" : "black"
+                  }
+                >
+                  {res}
+                </TagText>
               </Tag>
             );
           })}
         </CurrentTagContainer>
         <IsHiddenContainer>
           <Row>
-            <TouchableOpacity onPress={toggleHidden}>
-              {userPoliticalOpinion.isHidden ? (
-                <Ionicons name="square-outline" size={34} color="black" />
-              ) : (
-                <Ionicons name="checkbox" size={34} color="black" />
-              )}
-            </TouchableOpacity>
+            <Switch
+              value={!userPoliticalOpinion.isHidden}
+              onValueChange={toggleHidden}
+            />
             <IsHiddenText>Visible on profile?</IsHiddenText>
           </Row>
         </IsHiddenContainer>
+        <SaveButton
+          backgroundColor={
+            initialObj.opinion === userPoliticalOpinion.opinion &&
+            userPoliticalOpinion.isHidden === initialObj.isHidden
+              ? "gray"
+              : "#527e65"
+          }
+          disabled={
+            initialObj.opinion === userPoliticalOpinion.opinion &&
+            userPoliticalOpinion.isHidden === initialObj.isHidden
+          }
+          indexToUpdate={3}
+          newInfo={userPoliticalOpinion}
+          navigation={navigation}
+          userData={userData}
+        />
       </Container>
     </SafeArea>
   );
@@ -110,8 +128,8 @@ const Tag = styled(TouchableOpacity)`
 `;
 
 const TagText = styled(Text)`
-  color: white;
-  font-family: poppins-600;
+  color: ${({ color }) => color};
+  font-family: poppins-500;
   font-size: 12px;
 `;
 
@@ -134,5 +152,5 @@ const IsHiddenText = styled(Text)`
   color: black;
   font-family: poppins-500;
   font-size: 14px;
-  margin-left: 10px;
+  margin-left: 12px;
 `;

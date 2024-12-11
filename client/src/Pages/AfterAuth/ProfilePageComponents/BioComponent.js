@@ -58,6 +58,13 @@ export const BioComponent = ({ bio, setBio }) => {
         <MaxCharText>{bio.length}/250 char</MaxCharText>
       </InputContainer>
       <UpdateBioButton
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5, // For Android
+        }}
         backgroundColor={initialBio === bio ? "#b1b1b1" : "green"}
         disabled={initialBio === bio}
         onPress={uploadNewBio}

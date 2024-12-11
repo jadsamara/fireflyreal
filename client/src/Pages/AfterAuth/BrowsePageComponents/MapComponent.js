@@ -13,9 +13,17 @@ import { getUserInfo } from "../../../Functions/GetUserInfo";
 
 import { AuthContext } from "../../../Config/AuthContext";
 
-export const MapComponent = () => {
-  const [allSparks, setAllSparks] = useState([]);
+const GOOGLE_API_KEY = "AIzaSyCGaJwEFJ65xMcXTPGFBgLg6LGNPXmAeKo";
+
+export const MapComponent = ({ city, setCity }) => {
   const { location } = useContext(AuthContext);
+  const [allSparks, setAllSparks] = useState([]);
+  const [region, setRegion] = useState({
+    latitude: location.latitude,
+    longitude: location.longitude,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
   useEffect(() => {
     const fetchSparks = async () => {
@@ -56,15 +64,29 @@ export const MapComponent = () => {
     fetchSparks();
   }, []);
 
+  const onRegionChangeComplete = async (newRegion) => {
+    setRegion(newRegion);
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${newRegion.latitude},${newRegion.longitude}&key=${GOOGLE_API_KEY}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const addressComponents = data.results[0].address_components;
+      const cityObj = addressComponents.find((component) =>
+        component.types.includes("locality")
+      );
+
+      setCity(cityObj ? cityObj.long_name : "");
+    } catch (error) {
+      console.error("Failed to fetch city name:", error);
+    }
+  };
+
   return (
     <MapContainer>
       <MapView
-        initialRegion={{
-          latitude: location.latitude,
-          longitude: location.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        initialRegion={region}
+        onRegionChangeComplete={onRegionChangeComplete}
         style={{ flex: 1 }}
       >
         {allSparks.map((spark, index) => {
@@ -72,6 +94,7 @@ export const MapComponent = () => {
             <React.Fragment key={index}>
               <Marker coordinate={spark.hangoutCoordinates}>
                 <ProfilePicture
+                  borderColor={spark.isSparkActive ? "#FFD572" : "#79D17C"}
                   source={{
                     uri: spark.hostProfilePicture,
                   }}
@@ -129,11 +152,11 @@ const MapContainer = styled(View)`
 `;
 
 const ProfilePicture = styled(Image)`
-  height: 45px;
-  width: 45px;
+  height: 50px;
+  width: 50px;
   border-radius: 10000px;
   border-width: 2px;
-  border-color: green;
+  border-color: ${({ borderColor }) => borderColor};
 `;
 
 const SparkImageContainer = styled(View)`

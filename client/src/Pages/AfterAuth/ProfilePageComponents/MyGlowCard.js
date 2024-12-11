@@ -24,11 +24,11 @@ const ButtonContainer = styled(TouchableOpacity)`
   border-top-width: 0.3px;
   padding: 5px;
   border-color: gray;
-  margin-top: 10px;
   flex-direction: row;
   align-self: center;
   align-items: center;
   justify-content: space-between;
+  margin-top: 5px;
 `;
 
 const Col = styled(View)``;

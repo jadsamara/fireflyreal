@@ -199,7 +199,7 @@ export const BodyComponent = ({ navigation, setEnableScroll }) => {
 
 const Container = styled(View)`
   width: 100%;
-  margin-bottom: 100px;
+  margin-bottom: 60px;
 `;
 
 const Row = styled(View)`

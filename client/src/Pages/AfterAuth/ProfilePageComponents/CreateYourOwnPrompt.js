@@ -9,11 +9,10 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { BackArrow } from "../../../Components/PreAuthentication";
 import { doc, updateDoc } from "firebase/firestore";
 
-import * as ImagePicker from "expo-image-picker";
-
 import { LoadingScreen } from "../../../Components/GlobalComponents/LoadingScreen";
 import { useDispatch } from "react-redux";
 import { updateProfilePhotos } from "../../../Slices/userSlice";
+import { selectImageFromGalleryFunc } from "../../../Functions/SelectImageFromGallery";
 
 export const CreateYourOwnPrompt = ({ navigation, route }) => {
   const { setAllPhotos, allPhotos } = useContext(ProfilePageContext);
@@ -35,9 +34,11 @@ export const CreateYourOwnPrompt = ({ navigation, route }) => {
   const onHandlePromptPressed = async () => {
     navigation.pop(2);
     if (type === "photo") {
-      selectImageFromGallery(prompt);
+      await selectImageFromGalleryFunc().then((res) => {
+        uploadImageToFirebase(res);
+      });
     } else if (type === "prompt") {
-      await uploadImageToFirebase(uri, prompt);
+      await uploadImageToFirebase(uri);
     }
   };
 
@@ -73,30 +74,6 @@ export const CreateYourOwnPrompt = ({ navigation, route }) => {
       });
     } catch (error) {
       console.error("Error during upload to Firebase:", error);
-    }
-  };
-
-  const selectImageFromGallery = async (prompt) => {
-    try {
-      const image = await ImagePicker.openPicker({
-        width: 300,
-        height: 300,
-        cropping: true,
-        mediaType: "photo",
-      });
-
-      const uri = image.path;
-
-      // Upload the selected image to Firebase Storage
-      await uploadImageToFirebase(uri);
-    } catch (error) {
-      if (error.code === "E_PICKER_CANCELLED") {
-        // Handle case where user cancels the image picker
-        Alert.alert("Image selection cancelled");
-        return;
-      }
-      console.error("Error selecting image:", error);
-      Alert.alert("Error", "Failed to select image");
     }
   };
 

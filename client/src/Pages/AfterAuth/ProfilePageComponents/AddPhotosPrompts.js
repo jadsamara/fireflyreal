@@ -12,11 +12,10 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, storage, database } from "../../../Config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import ImagePicker from "react-native-image-crop-picker";
-
 import { LoadingScreen } from "../../../Components/GlobalComponents/LoadingScreen";
 import { useDispatch } from "react-redux";
 import { updateProfilePhotos } from "../../../Slices/userSlice";
+import { selectImageFromGalleryFunc } from "../../../Functions/SelectImageFromGallery";
 
 export const AddPhotosPrompts = ({ navigation, route }) => {
   const userNumber = auth.currentUser.phoneNumber;
@@ -49,7 +48,9 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
   const onHandlePromptPressed = async (prompt) => {
     navigation.goBack();
     if (type === "photo") {
-      selectImageFromGallery(prompt);
+      await selectImageFromGalleryFunc().then((res) => {
+        uploadImageToFirebase(res, prompt);
+      });
     } else if (type === "prompt") {
       await uploadImageToFirebase(uri, prompt);
     }
@@ -88,30 +89,6 @@ export const AddPhotosPrompts = ({ navigation, route }) => {
       console.log("Prompt updated successfully!");
     } catch (error) {
       console.error("Error updating prompt or uploading image:", error);
-    }
-  };
-
-  const selectImageFromGallery = async (prompt) => {
-    try {
-      const image = await ImagePicker.openPicker({
-        width: 300,
-        height: 500,
-        cropping: true,
-        mediaType: "photo",
-      });
-
-      const uri = image.path;
-
-      // Upload the selected image to Firebase Storage
-      await uploadImageToFirebase(uri, prompt);
-    } catch (error) {
-      if (error.code === "E_PICKER_CANCELLED") {
-        // Handle case where user cancels the image picker
-        Alert.alert("Image selection cancelled");
-        return;
-      }
-      console.error("Error selecting image:", error);
-      Alert.alert("Error", "Failed to select image");
     }
   };
 

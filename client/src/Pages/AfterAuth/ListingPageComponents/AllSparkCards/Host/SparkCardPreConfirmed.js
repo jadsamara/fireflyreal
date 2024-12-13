@@ -9,6 +9,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { getUserInfo } from "../../../../../Functions/GetUserInfo";
+import SparkBlur from "../../../../../Assets/sparkblur.png";
 
 export const SparkCardPreConfirmed = ({ spark = {}, navigation }) => {
   const {
@@ -147,6 +148,9 @@ export const SparkCardPreConfirmed = ({ spark = {}, navigation }) => {
             uri: sparkImage,
           }}
         />
+        <SparkBlurContainer>
+          <SparkBlurImage source={SparkBlur} />
+        </SparkBlurContainer>
         <SparkDaysLeft>
           <MaterialCommunityIcons
             name="clock-time-four"
@@ -475,4 +479,18 @@ const ProfileImage = styled(Image)`
   width: 100%;
   height: 100%;
   border-radius: 100px;
+`;
+
+const SparkBlurContainer = styled(View)`
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0px;
+`;
+
+const SparkBlurImage = styled(Image)`
+  height: 100%;
+  width: 100%;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 `;

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/native";
 
@@ -114,47 +114,29 @@ export const HomePage = ({ navigation }) => {
 };
 
 const Header = styled(View)`
+  width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 90%;
-  align-self: center;
+  padding-left: ${(props) => props.theme.space.large};
+  padding-right: ${(props) => props.theme.space.large};
 `;
 
 const HeaderText = styled(Text)`
-  font-size: 18px;
+  font-size: ${(props) => props.theme.fontSizes.header};
   font-family: poppins-500;
 `;
 
 const SearchBarContainer = styled(View)`
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: ${(props) => props.theme.space.mediumLarge};
+  padding-right: ${(props) => props.theme.space.mediumLarge};
 `;
 
 const SparkCardContainer = styled(View)`
-  padding: 15px;
+  padding: ${(props) => props.theme.space.large};
   flex: 1;
 `;
 
 const FilterContainer = styled(View)`
   width: 100%;
-`;
-
-const ActiveDateContainer = styled(TouchableOpacity)`
-  position: absolute;
-  height: 30px;
-  background-color: #ffd572;
-  border-radius: 30px;
-  bottom: 20px;
-  right: 20px;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  width: 220px;
-`;
-
-const ActiveDateText = styled(Text)`
-  font-size: 12px;
-  font-family: poppins-600;
-  color: white;
 `;

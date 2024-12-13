@@ -80,16 +80,15 @@ export const HomeScreenFiltersPage = ({ navigation }) => {
 
 const HeaderContainer = styled(View)`
   width: 100%;
-  height: 40px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: ${(props) => props.theme.space.large};
+  padding-right: ${(props) => props.theme.space.large};
 `;
 
 const HeaderText = styled(Text)`
-  font-size: 18px;
+  font-size: ${(props) => props.theme.fontSizes.header};
   font-family: poppins-500;
 `;
 
@@ -108,11 +107,11 @@ const Heading = styled(View)`
 
 const CloseButton = styled(TouchableOpacity)`
   position: absolute;
-  left: 10px; /* Adjust the left position as needed */
+  left: 10px;
 `;
 
 const FiltersTitle = styled(Text)`
-  font-size: 24px;
+  font-size: ${(props) => props.theme.fontSizes.h5};
   font-family: poppins-500;
   text-align: center;
 `;

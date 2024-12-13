@@ -9,6 +9,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, database } from "../../../../../Config/firebase";
 
 import { FontAwesome } from "@expo/vector-icons";
+import { FilterTag } from "../../../../../Components/Tags/FilterTag";
 
 export const ActiveFilters = () => {
   const { filters, setFilters } = useContext(HomePageContext);
@@ -74,14 +75,10 @@ export const ActiveFilters = () => {
               let tagIcon = null;
               if (tag.maxDistance !== undefined) {
                 tagText = `Within: ${tag.maxDistance} km`;
-                tagIcon = (
-                  <FontAwesome name="map-marker" size={20} color="white" />
-                );
+                tagIcon = <TagIcon name="map-marker" size={16} color="white" />;
               } else if (tag.city !== undefined) {
                 tagText = `${tag.city}`;
-                tagIcon = (
-                  <FontAwesome name="map-marker" size={20} color="white" />
-                );
+                tagIcon = <TagIcon name="map-marker" size={16} color="white" />;
               } else if (tag.date !== undefined) {
                 const startDate = new Date(
                   tag.date.startDate.seconds * 1000 +
@@ -103,9 +100,7 @@ export const ActiveFilters = () => {
                   { month: "short", day: "numeric" }
                 );
                 tagText = `${formattedStartDate} - ${formattedFutureDate}`;
-                tagIcon = (
-                  <FontAwesome name="calendar-o" size={16} color="white" />
-                );
+                tagIcon = <TagIcon name="calendar-o" size={16} color="white" />;
               } else if (tag.maxPeople !== undefined) {
                 tagText = `Max People: ${tag.maxPeople}`;
               } else if (tag.minPeople !== undefined) {
@@ -115,24 +110,22 @@ export const ActiveFilters = () => {
               } else if (Array.isArray(tag.tags)) {
                 // If the tag is an array, display each item as a separate tag
                 return tag.tags.map((subTag, subIndex) => (
-                  <Tag key={index + "-" + subIndex}>
-                    <TagText>{subTag}</TagText>
+                  <FilterTag tagText={subTag} key={index + "-" + subIndex}>
                     <TagClose onPress={() => deleteTag(tag.subTag)}>
-                      <TagCloseText>x</TagCloseText>
+                      <FontAwesome name="close" size={10} color="white" />
                     </TagClose>
-                  </Tag>
+                  </FilterTag>
                 ));
               }
 
               // Render the tag
               return (
-                <Tag key={index}>
-                  <TagText>{tagText}</TagText>
+                <FilterTag tagText={tagText} key={index}>
                   {tagIcon}
                   <TagClose onPress={() => deleteTag(index)}>
-                    <TagCloseText>x</TagCloseText>
+                    <FontAwesome name="close" size={10} color="white" />
                   </TagClose>
-                </Tag>
+                </FilterTag>
               );
             }
           })}
@@ -147,7 +140,7 @@ const ActiveFiltersContainer = styled(View)`
 `;
 
 const ActiveFiltersText = styled(Text)`
-  font-size: 18px;
+  font-size: ${(props) => props.theme.fontSizes.header};
   font-family: poppins-500;
 `;
 
@@ -156,44 +149,22 @@ const CurrentTagContainer = styled(View)`
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-top: 10px;
-`;
-
-const Tag = styled(View)`
-  background-color: #527e65;
-  padding-left: 15px;
-  padding-right: 15px;
-  border-radius: 15px;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-left: 5px;
-  margin-top: 5px;
-  flex-direction: row;
-  height: 25px;
-`;
-
-const TagText = styled(Text)`
-  color: white;
-  font-size: 11px;
-  font-family: poppins-900;
-  margin-right: 10px;
+  margin-top: ${(props) => props.theme.space.mediumLarge};
 `;
 
 const TagClose = styled(TouchableOpacity)`
   position: absolute;
-  height: 15px;
-  width: 15px;
+  height: ${(props) => props.theme.space.large};
+  width: ${(props) => props.theme.space.large};
   justify-content: center;
   align-items: center;
   top: -5px;
   right: 0px;
-  border-radius: 20px;
+  border-radius: ${(props) => props.theme.space.large};
   background-color: #79d17c;
 `;
 
-const TagCloseText = styled(Text)`
-  color: white;
-  font-family: poppins-700;
-  font-size: 10px;
+const TagIcon = styled(FontAwesome)`
+  margin-left: ${(props) => props.theme.space.medium};
+  margin-right: ${(props) => props.theme.space.small};
 `;

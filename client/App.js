@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { LogBox } from "react-native";
 import * as Font from "expo-font";
+import { ThemeProvider } from "styled-components";
 
 import { RootNav } from "./src/Navigation";
 import { AuthProvider } from "./src/Config/AuthContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 
+import { theme } from "./src/Theme/";
 import { store } from "./store";
 
 export default function App() {
@@ -49,12 +51,14 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <AuthProvider>
-          <RootNav />
-        </AuthProvider>
-      </Provider>
-    </GestureHandlerRootView>
+    <ThemeProvider theme={theme}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <AuthProvider>
+            <RootNav />
+          </AuthProvider>
+        </Provider>
+      </GestureHandlerRootView>
+    </ThemeProvider>
   );
 }

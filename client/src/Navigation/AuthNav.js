@@ -59,7 +59,7 @@ export const AuthNav = () => {
   return (
     <AuthenticationStackProvider>
       <Stack.Navigator
-        initialRouteName="LoginPage"
+        initialRouteName="CreateAccountPageThree"
         screenOptions={screenOptions}
       >
         <Stack.Screen name="LoginPage" component={LoginPage} />

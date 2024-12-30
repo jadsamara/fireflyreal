@@ -43,6 +43,8 @@ import {
   HomeTown,
 } from "../Pages/PreAuthentication/UserFactsPages";
 
+import { ChooseIdPage } from "../Pages/PreAuthentication/SupportingPages/ChooseIdPage";
+
 import { AreaCodePage } from "../Pages/PreAuthentication/SupportingPages/AreaCodePage";
 
 export const AuthNav = () => {
@@ -59,7 +61,7 @@ export const AuthNav = () => {
   return (
     <AuthenticationStackProvider>
       <Stack.Navigator
-        initialRouteName="CreateAccountPageThree"
+        initialRouteName="LoginPage"
         screenOptions={screenOptions}
       >
         <Stack.Screen name="LoginPage" component={LoginPage} />
@@ -130,8 +132,10 @@ export const AuthNav = () => {
           name="HighestSchoolDegree"
           component={HighestSchoolDegree}
         />
+
         <Stack.Screen name="EthnicityPage" component={EthnicityPage} />
         <Stack.Screen name="HomeTown" component={HomeTown} />
+        <Stack.Screen name="ChooseIdPage" component={ChooseIdPage} />
 
         <Stack.Screen name="PageSixPrompts" component={PageSixPrompts} />
         <Stack.Screen

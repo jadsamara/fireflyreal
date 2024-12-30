@@ -47,7 +47,6 @@ export const AddPhotosOne = ({ navigation }) => {
       });
 
       const uri = image.path;
-
       // Upload the selected image to Firebase Storage
       await uploadImageToFirebase(uri);
     } catch (error) {

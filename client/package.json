@@ -70,6 +70,7 @@
     "react-native-draggable-grid": "^2.2.1",
     "react-native-drax": "^0.10.3",
     "react-native-fast-image": "^8.6.3",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-bottom-sheet": "^1.1.0",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-google-places-autocomplete": "^2.5.1",

@@ -5,20 +5,10 @@ import React, {
   useContext,
   useCallback,
 } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert, Image } from "react-native";
 import styled from "styled-components/native";
-import { SafeArea } from "../../Components/GlobalComponents/";
 import * as FileSystem from "expo-file-system";
-import { ProgressBar, BackArrow } from "../../Components/PreAuthentication";
 import { AuthenticationStackContext } from "../../Context/AuthenticationStackContext";
-import { FontAwesome } from "@expo/vector-icons";
 
 import {
   Camera,
@@ -28,14 +18,16 @@ import {
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
+import { LoadingScreen } from "../../Components/GlobalComponents/LoadingScreen";
 
-export const CreateAccountPageFive = ({ navigation }) => {
+export const CreateAccountPageFive = ({ navigation, route }) => {
+  const { idType } = route.params;
+
   const { profilePictureURI, front, setIsPhotoIDVerified, back, setBack } =
     useContext(AuthenticationStackContext);
   const device = useCameraDevice("back"); // Use the back camera
   const { hasPermission, requestPermission } = useCameraPermission();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [retakePhoto, setRetakePhoto] = useState(false);
   const cameraRef = useRef(null);
 
   useEffect(() => {
@@ -62,7 +54,6 @@ export const CreateAccountPageFive = ({ navigation }) => {
         setIsProcessing(false);
       } catch (error) {
         setIsProcessing(false);
-        setRetakePhoto(true);
         console.error("Error taking picture:", error);
         Alert.alert("Error", "Failed to take picture. Please try again.");
       }
@@ -113,7 +104,7 @@ export const CreateAccountPageFive = ({ navigation }) => {
         responseData &&
         responseData.warning[0].code === "UNRECOGNIZED_DOCUMENT"
       ) {
-        setRetakePhoto(true);
+        setBack("");
       } else if (responseData) {
         navigation.navigate("CreateAccountPageEight");
         setIsPhotoIDVerified(2);
@@ -121,16 +112,11 @@ export const CreateAccountPageFive = ({ navigation }) => {
 
       Alert.alert("Scan Result", "ID scan completed successfully!");
     } catch (error) {
-      setRetakePhoto(true);
+      setBack("");
 
       console.error("Error performing ID scan:", error);
       Alert.alert("Error", "Failed to perform ID scan. Please try again.");
     }
-  };
-
-  const clearPictureURI = () => {
-    setBack("");
-    setRetakePhoto(false);
   };
 
   const focus = useCallback((point) => {
@@ -143,95 +129,64 @@ export const CreateAccountPageFive = ({ navigation }) => {
     runOnJS(focus)({ x, y });
   });
 
+  if (isProcessing && back) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <SafeArea>
-      <BackArrow navigation={navigation} />
-
+    <GestureDetector gesture={gesture}>
       <Container>
-        <Title>Take A Picture of Your ID</Title>
-        {hasPermission === null ? (
-          <Text>Requesting camera permission...</Text>
-        ) : hasPermission === false ? (
-          <Text>No access to camera.</Text>
-        ) : !back ? (
-          <GestureDetector gesture={gesture}>
-            <CameraContainer>
-              <CameraComponent
-                ref={cameraRef}
-                device={device}
-                isActive={true}
-                photo={true}
-                video={false} // Set to true if video recording is needed
-                audio={false}
-              />
-            </CameraContainer>
-          </GestureDetector>
-        ) : (
-          <CameraContainer>
-            <TakenSelfieCheckImage
-              source={{ uri: `data:image/jpeg;base64,${back}` }}
-            />
-          </CameraContainer>
-        )}
+        <Title>Upload {idType.title}</Title>
+        <SubTitle>
+          Place your ID inside the frame and take a picture. Make sure it is not
+          cut or has any glare.
+        </SubTitle>
+        <CameraComponent
+          ref={cameraRef}
+          device={device}
+          isActive={true}
+          photo={true}
+          video={false}
+          audio={false}
+        />
 
-        <SubTitle>Back Side</SubTitle>
-
-        {!back && !isProcessing && !retakePhoto ? (
-          <CaptureButton onPress={takePicture}>
-            <CaptureText>Capture</CaptureText>
-          </CaptureButton>
-        ) : isProcessing && back && !retakePhoto ? (
-          <Row>
-            <ProcessedText>Processing Photo</ProcessedText>
-            <ActivityIndicator color="#000" />
-          </Row>
-        ) : retakePhoto ? (
-          <CaptureButton onPress={clearPictureURI}>
-            <CaptureText>Retake</CaptureText>
-          </CaptureButton>
-        ) : (
-          <Row>
-            <ProcessedText>Done</ProcessedText>
-
-            <FontAwesome name="check" size={22} color="#79d17c" />
-          </Row>
-        )}
+        <Hole />
+        <CaptureButton onPress={takePicture}>
+          <CaptureButtonTwo />
+        </CaptureButton>
       </Container>
-      <ProgressBar width={"70%"} />
-    </SafeArea>
+    </GestureDetector>
   );
 };
 
 const Container = styled(View)`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
+  width: 100%;
+  z-index: 99999999;
+  overflow: hidden;
 `;
 
 const Title = styled(Text)`
   position: absolute;
-  top: 20px;
-  left: 30px;
-  color: black;
-  font-family: "poppins-900";
-  font-size: 28px;
+  top: 80px;
+  color: white;
+  font-family: "poppins-600";
+  font-size: 22px;
+  z-index: 999999;
+  text-align: center;
+  align-self: center;
 `;
 
 const SubTitle = styled(Text)`
-  color: black;
-  font-family: "poppins-600";
-  font-size: 14px;
   position: absolute;
-  bottom: 300px;
-`;
-
-const CameraContainer = styled(View)`
-  height: 230px;
-  width: 85%;
-  overflow: hidden;
-  position: absolute;
-  top: 150px;
-  border-radius: 40px;
+  top: 140px;
+  color: white;
+  font-family: "poppins-400";
+  font-size: 16px;
+  z-index: 999999;
+  text-align: center;
+  align-self: center;
+  width: 80%;
 `;
 
 const CameraComponent = styled(Camera)`
@@ -239,37 +194,37 @@ const CameraComponent = styled(Camera)`
   height: 100%;
 `;
 
+const Hole = styled(View)`
+  height: 230px;
+  width: 85%;
+  position: absolute;
+  top: 300px;
+  border-radius: 40px;
+  border-width: 3px;
+  border-color: white;
+  align-self: center;
+  background-color: transparent;
+  z-index: 999999;
+`;
+
 const CaptureButton = styled(TouchableOpacity)`
   position: absolute;
-  bottom: 200px;
-  width: 165px;
-  height: 40px;
-  background-color: #79d17c;
-  border-radius: 10px;
+  bottom: 100px;
+  width: 90px;
+  height: 90px;
+  background-color: white;
+  border-radius: 50px;
   justify-content: center;
   align-items: center;
+  align-self: center;
 `;
 
-const CaptureText = styled(Text)`
-  color: white;
-  font-size: 16px;
-  font-family: "poppins-700";
-`;
-
-const Row = styled(View)`
-  position: absolute;
-  bottom: 200px;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-`;
-
-const ProcessedText = styled(Text)`
-  color: black;
-  font-size: 14px;
-  font-family: "poppins-500";
-  margin-right: 10px;
+const CaptureButtonTwo = styled(View)`
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border-radius: 50px;
+  border-width: 1px;
 `;
 
 const TakenSelfieCheckImage = styled(Image)`
@@ -278,5 +233,3 @@ const TakenSelfieCheckImage = styled(Image)`
   flex: 1;
   z-index: 10000;
 `;
-
-const CheckMarkView = styled(View)``;

@@ -76,6 +76,7 @@ export const GoogleAutoComponent = ({ setSearchText, searchText }) => {
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&key=${GOOGLE_API_KEY}`
     );
     const data = await response.json();
+    console.log(data.result.types);
 
     const photoReferences = data.result.photos.map(
       (obj) => obj.photo_reference

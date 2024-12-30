@@ -95,7 +95,7 @@ export const HomePage = ({ navigation }) => {
       </FilterContainer>
 
       <SparkCardContainer>
-        <SparkCardsList navigation={navigation} />
+        <SparkCardsList navigation={navigation} searchKeyword={searchKeyword} />
       </SparkCardContainer>
 
       {nextActiveDate && countdown ? (

@@ -12,7 +12,6 @@ import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
 import { firebaseConfig } from "../../Config/firebase";
 import {
-  BackArrow,
   ProgressBar,
   ContinueButton,
 } from "../../Components/PreAuthentication";

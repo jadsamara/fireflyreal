@@ -1,10 +1,11 @@
-import { View, Text, TextInput, ScrollView } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import React from "react";
 
 import styled from "styled-components";
 import { AntDesign, Entypo, FontAwesome5 } from "@expo/vector-icons";
 
 import { calculateAge } from "../../../../../../Functions/GetAgeNew";
+import { BlurAddressComponent } from "../../../../../../Components/SparkCardComponents/BlurAddressComponent";
 
 export const BodyComponent = ({ spark }) => {
   const formatDate = (timestamp) => {
@@ -87,10 +88,10 @@ export const BodyComponent = ({ spark }) => {
         <HorizontalSeparator />
         <AddressTextContainer>
           <Entypo name="location-pin" size={20} color="#93E4B6" />
-
-          <AddressText numberOfLines={1} ellipsizeMode="tail">
-            {spark.fullAddress}
-          </AddressText>
+          <BlurAddressComponent
+            useShortName={spark.useShortName}
+            fullAddress={spark.fullAddress}
+          />
         </AddressTextContainer>
       </AddressContainer>
 
@@ -193,13 +194,6 @@ const AddressTextContainer = styled(View)`
   align-items: center;
   margin-top: 10px;
   margin-bottom: 5px;
-`;
-
-const AddressText = styled(Text)`
-  font-size: 8px;
-  font-family: poppins-500;
-  margin-left: 5px;
-  width: 90%;
 `;
 
 const DescriptionContainer = styled(View)`

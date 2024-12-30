@@ -1,7 +1,5 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import React, { useState } from "react";
-
-import { SafeArea } from "../../../../../Components/GlobalComponents/";
 
 import styled from "styled-components";
 

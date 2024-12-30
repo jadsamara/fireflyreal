@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
@@ -10,10 +10,74 @@ import {
   ContinueButton,
   ProgressBarFixed,
 } from "../../Components/PreAuthentication";
+import { AuthenticationStackContext } from "../../Context/AuthenticationStackContext";
+
+import { useFace } from "@biopassid/face-sdk-react-native";
+import { useCameraPermission } from "react-native-vision-camera";
 
 export const MandatoryScreeningOne = ({ navigation }) => {
-  const onHandleNavigate = () => {
-    navigation.navigate("CreateAccountPageThree");
+  const { takeFace } = useFace();
+  const { setProfilePictureURI, setIsPhotoIDVerified, profilePicture } =
+    useContext(AuthenticationStackContext);
+
+  const { hasPermission, requestPermission } = useCameraPermission();
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      // Explicitly request permission if not determined
+      if (hasPermission.status === "notDetermined" || hasPermission === false) {
+        await requestPermission();
+      }
+    };
+
+    checkPermission();
+  }, [hasPermission.status, requestPermission]);
+
+  const onPress = async () => {
+    await takeFace({
+      config: {
+        licenseKey: "NWK5-KPH4-5MGS-NHFA",
+      },
+      onFaceCapture: async (image) => {
+        const base64 = image;
+
+        setIsPhotoIDVerified(1);
+        navigation.navigate("FaceScanSuccessPage");
+        // await performIDScan(base64);
+      },
+    });
+  };
+
+  const performIDScan = async (base64Image) => {
+    try {
+      setProfilePictureURI(base64Image);
+      const apiKey = "injFW5TCX0aUihI6zGIVOypSO0KSQAtb";
+      const url = "https://api2.idanalyzer.com/face";
+
+      const options = {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          "X-API-KEY": apiKey,
+        },
+        body: JSON.stringify({
+          face: base64Image,
+          reference: profilePicture,
+          saveFile: true,
+          region: "US", // Replace with appropriate region code
+        }),
+      };
+
+      const response = await fetch(url, options);
+      const responseData = await response.json();
+      console.log(responseData);
+
+      if (responseData) {
+        setIsPhotoIDVerified(1);
+        navigation.navigate("FaceScanSuccessPage");
+      }
+    } catch (e) {}
   };
 
   return (
@@ -64,7 +128,7 @@ export const MandatoryScreeningOne = ({ navigation }) => {
             (whether verified or not).
           </BottomFooterTextTwo>
         </Container>
-        <ContinueButton onPress={onHandleNavigate} bottom={90} />
+        <ContinueButton onPress={onPress} bottom={90} />
       </ScrollContainer>
       <ProgressBarFixed width={"10%"} bottom={0} backgroundColor="white" />
     </SafeArea>

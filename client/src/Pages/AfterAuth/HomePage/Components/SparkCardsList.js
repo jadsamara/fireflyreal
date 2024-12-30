@@ -20,13 +20,15 @@ import { getUserInfo } from "../../../../Functions/GetUserInfo";
 
 import { getDistance } from "../../../../Functions/GetDistance";
 
-export const SparkCardsList = ({ navigation }) => {
+const OPEN_AI_KEY =
+  "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";
+
+export const SparkCardsList = ({ navigation, searchKeyword }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
   const [initialData, setInitialData] = useState([0]);
 
   const { location } = useContext(AuthContext);
-  const { setSelectedDate, reset } = useContext(HomePageContext);
+  const { filters } = useContext(HomePageContext);
   const userNumber = auth.currentUser.phoneNumber;
 
   const onHandleNavigateViewSpark = (item) => {
@@ -38,62 +40,97 @@ export const SparkCardsList = ({ navigation }) => {
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
 
-    // Simulate an asynchronous task (e.g., data fetching)
-    setTimeout(() => {
-      // Fetch the data or perform any other necessary operations
-      const getData = async () => {
-        try {
-          const querySnapshot = await getDocs(
-            query(collection(database, "Sparks"), orderBy("timeOfPost", "desc"))
+    const getData = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          query(collection(database, "Sparks"), orderBy("timeOfPost", "desc"))
+        );
+
+        if (querySnapshot) {
+          // Get AI-generated tags based on the search query
+          const dataWithDistances = await Promise.all(
+            querySnapshot.docs.map(async (doc) => {
+              const dates = doc.data();
+
+              // Early filtering based on the filters state
+              for (const filter of filters) {
+                if (!filter.isEnabled) continue;
+
+                // Filter by max distance
+                if (filter.maxDistance && location) {
+                  const distance = getDistance(location, dates);
+                  if (distance > filter.maxDistance) return null; // Skip this document
+                }
+
+                // Filter by date range
+                if (filter.date) {
+                  const { startDate, futureDate } = filter.date;
+                  const itemDate = dates.chosenTime;
+                  const startDateMS = startDate.seconds * 1000;
+                  const futureDateMS = futureDate.seconds * 1000;
+                  if (startDateMS > itemDate || futureDateMS < itemDate) {
+                    return null; // Skip this document
+                  }
+                }
+
+                // Filter by max people
+                if (
+                  filter.maxPeople &&
+                  dates.totalNumberOfParticipants > filter.maxPeople
+                ) {
+                  return null;
+                }
+
+                // Filter by min people
+                if (
+                  filter.minPeople &&
+                  dates.totalNumberOfParticipants < filter.minPeople
+                ) {
+                  return null;
+                }
+              }
+
+              // Skip if spark is not active or the user is involved
+              if (
+                dates.isSparkActive ||
+                dates.isCompleted.some((user) => user === userNumber) ||
+                dates.host === userNumber ||
+                dates.currentlyJoinedProfileParticipants.includes(userNumber) ||
+                dates.allRequesters.some(
+                  (requester) => requester.user === userNumber
+                )
+              ) {
+                return null; // Skip this spark
+              }
+
+              // Now, check if the spark matches any of the AI-generated tags
+
+              const documentId = doc.id;
+              const distance = getDistance(location, dates); // Calculate distance once
+              const userInfo = await getUserInfo(dates.host); // Fetch user info
+
+              return { documentId, distance, userInfo, ...dates };
+            })
           );
 
-          if (querySnapshot) {
-            const dataWithDistances = await Promise.all(
-              querySnapshot.docs.map(async (doc) => {
-                const dates = doc.data();
-                if (
-                  dates.isSparkActive ||
-                  dates.isCompleted.some((user) => user === userNumber) ||
-                  dates.host === userNumber ||
-                  dates.currentlyJoinedProfileParticipants.includes(
-                    userNumber
-                  ) ||
-                  dates.allRequesters.some(
-                    (requester) => requester.user === userNumber
-                  )
-                ) {
-                  return null; // Skip this document if the host doesn't match the userNumber
-                }
-                const documentId = doc.id;
+          const homeScreenData = dataWithDistances.filter(Boolean); // Remove null entries
 
-                const distance = getDistance(location, dates);
-                const userInfo = await getUserInfo(dates.host);
-
-                return { documentId, distance, userInfo, ...dates };
-              })
-            );
-
-            const homeScreenData = dataWithDistances.filter(Boolean);
-
-            setFilteredData(homeScreenData);
-            setInitialData(homeScreenData);
-          }
-
-          setRefreshing(false); // Set refreshing state back to false after data fetching is complete
-        } catch (error) {
-          // Handle errors, e.g., log them or show a message to the user
-          console.error("Error fetching data:", error);
-          setRefreshing(false);
+          setInitialData(homeScreenData);
         }
-      };
 
-      if (location) {
-        getData();
-      } else {
+        setRefreshing(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
         setRefreshing(false);
       }
-    }, 10); // Adjust the delay time as needed
-  }, []);
+    };
+
+    if (location) {
+      getData(); // Directly call getData if location is available
+    } else {
+      setRefreshing(false);
+    }
+  }, [filters, location, userNumber, searchKeyword]); // Add `searchKeyword` as a dependency to update when the search input changes
 
   useEffect(() => {
     handleRefresh();

@@ -1,4 +1,4 @@
-package com.jadsam.firefly1
+package com.gallopinnovations.firefly
 
 import android.os.Build
 import android.os.Bundle

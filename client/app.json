@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "firefly-1",
-    "slug": "firefly-1",
-    "version": "1.0.3",
+    "name": "Firefly",
+    "slug": "firefly",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
       [
         "expo-image-picker",
@@ -28,16 +30,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jadsam.firefly1"
+      "bundleIdentifier": "undefined",
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jadsam.firefly1",
-      "permissions": ["android.permission.RECORD_AUDIO"],
-      "googleServicesFile": "./google-services.json"
+      "package": "undefined",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,8 +53,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "8832c381-3769-4843-b00a-534372facfa8"
+        "projectId": "97200e2a-8e7d-4d1d-af39-864d589d4f62"
       }
-    }
+    },
+    "owner": "jadsamara001"
   }
 }

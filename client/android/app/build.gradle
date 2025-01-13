@@ -93,13 +93,13 @@ android {
         jvmTarget = "17"
     }
 
-    namespace 'com.jadsam.firefly1'
+    namespace 'com.gallopinnovations.firefly'
     defaultConfig {
-        applicationId 'com.jadsam.firefly1'
+        applicationId 'com.gallopinnovations.firefly'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.4"
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
     }
     signingConfigs {

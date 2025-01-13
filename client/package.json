@@ -1,11 +1,12 @@
 {
   "name": "firefly",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postversion": "react-native-version"
   },
   "dependencies": {
     "@ballerine/web-ui-sdk": "^1.5.59",
@@ -102,7 +103,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/react": "^18.3.1"
+    "@types/react": "^18.3.1",
+    "react-native-version": "^4.0.0"
   },
   "private": true
 }

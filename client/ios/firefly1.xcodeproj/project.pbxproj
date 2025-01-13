@@ -321,7 +321,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = firefly1/firefly1.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 67JSG3YJRS;
+				DEVELOPMENT_TEAM = 4RGT8UGQS9;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -340,7 +340,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jadsam.firefly1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jadsam.firefly;
 				PRODUCT_NAME = firefly1;
 				SWIFT_OBJC_BRIDGING_HEADER = "firefly1/firefly1-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -358,7 +358,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = firefly1/firefly1.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 67JSG3YJRS;
+				DEVELOPMENT_TEAM = 4RGT8UGQS9;
 				INFOPLIST_FILE = firefly1/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -372,7 +372,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jadsam.firefly1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jadsam.firefly;
 				PRODUCT_NAME = firefly1;
 				SWIFT_OBJC_BRIDGING_HEADER = "firefly1/firefly1-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
